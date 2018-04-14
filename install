@@ -361,10 +361,10 @@ function ee_upgrade_php(){
               cp -f /etc/php/7.2/fpm/php-fpm.conf /tmp/php-conf/7.2 &>> /dev/null
 
 
-            apt-get -y install php5.6-fpm php5.6-curl php5.6-gd php5.6-imap php5.6-mcrypt php5.6-readline php5.6-mysql php5.6-cli php5.6-common php5.6-curl php5.6-mbstring php5.6-bcmath php5.6-recode php5.6-mysql php5.6-opcache php-memcached php-imagick memcached graphviz php-pear php-xdebug php-msgpack php5.6-zip php5.6-xml php-memcache || ee_lib_error "Unable to install PHP 5.6 packages, exit status " 1
+            apt-get -y install php5.6-fpm php5.6-curl php5.6-gd php5.6-imap php5.6-mcrypt php5.6-readline php5.6-mysql php5.6-cli php5.6-common php5.6-mbstring php5.6-bcmath php5.6-recode php5.6-opcache php-memcached php-imagick memcached graphviz php-pear php-xdebug php-msgpack php5.6-zip php5.6-xml php-memcache || ee_lib_error "Unable to install PHP 5.6 packages, exit status " 1
             dpkg-query -W -f='${Status} ${Version}\n' php7.2-fpm 2>/dev/null | grep installed
             if [ "$?" -eq "0" ]; then
-                apt-get -y install php7.2-fpm php7.2-curl php7.2-gd php7.2-imap php7.2-readline php7.2-common php7.2-recode php7.2-mysql php7.2-cli php7.2-curl php7.2-mbstring php7.2-bcmath php7.2-mysql php7.2-opcache php7.2-zip php7.2-xml php-memcached php-imagick php-memcache memcached graphviz php-pear php-xdebug php-msgpack  php7.2-soap || ee_lib_error "Unable to install PHP 7.2 packages, exit status " 1
+                apt-get -y install apt-get -y install php7.2-fpm php7.2-curl php7.2-gd php7.2-imap php7.2-readline php7.2-common php7.2-recode php7.2-mysql php7.2-cli php7.2-bz2 php7.2-mbstring php7.2-bcmath php7.2-opcache php7.2-zip php7.2-xml php7.2-intl php7.2-soap php-memcached php-imagick php-memcache memcached graphviz php-pear php-xdebug php-msgpack || ee_lib_error "Unable to install PHP 7.2 packages, exit status " 1
                 mv -f /tmp/php-conf/7.2/www.conf /etc/php/7.2/fpm/pool.d/www.conf  &>> /dev/null
                 mv -f /tmp/php-conf/7.2/debug.conf /etc/php/7.2/fpm/pool.d/debug.conf &>> /dev/null
                 mv -f /tmp/php-conf/7.2/php.ini /etc/php/7.2/fpm/php.ini  &>> /dev/null
