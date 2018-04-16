@@ -198,7 +198,7 @@ function ee_sync_db()
             ee_site_current_cache="wpfc"
         fi
 
-        ee_webroot="/var/www/$site"
+        ee_webroot="/srv/$site"
 
         # Insert query to insert old site information into ee.db
         echo "INSERT INTO sites (sitename, site_type, cache_type, site_path, is_enabled, is_ssl, storage_fs, storage_db)

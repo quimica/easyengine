@@ -46,7 +46,7 @@ class EEVariables():
     ee_fqdn = socket.getfqdn()
 
     # EasyEngien default webroot path
-    ee_webroot = '/var/www/'
+    ee_webroot = '/srv/'
 
     # PHP5 user
     ee_php_user = 'www-data'

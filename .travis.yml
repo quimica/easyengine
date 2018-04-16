@@ -109,6 +109,6 @@ script:
 
   - sudo ee site delete site12.in --all --no-prompt || sudo tail -n50 /var/log/ee/ee.log
 
-  - sudo ls /var/www/
+  - sudo ls /srv/
   - sudo wp --allow-root --info
   - sudo bash -c 'cat /var/log/ee/ee.log'

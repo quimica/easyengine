@@ -1251,8 +1251,8 @@ def deleteDB(self, dbname, dbuser, dbhost, exit=True):
 def deleteWebRoot(self, webroot):
     # do some preprocessing before proceeding
     webroot = webroot.strip()
-    if (webroot == "/var/www/" or webroot == "/var/www"
-       or webroot == "/var/www/.." or webroot == "/var/www/."):
+    if (webroot == "/srv/" or webroot == "/srv"
+       or webroot == "/srv/.." or webroot == "/srv/."):
         Log.debug(self, "Tried to remove {0}, but didn't remove it"
                   .format(webroot))
         return False
@@ -1337,7 +1337,7 @@ def setupLetsEncrypt(self, ee_domain_name):
         ssl= archivedCertificateHandle(self,ee_domain_name,ee_wp_email)
     else:
         Log.warn(self,"Please Wait while we fetch SSL Certificate for your site.\nIt may take time depending upon network.")
-        ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto certonly --webroot -w /var/www/{0}/htdocs/ -d {0} -d www.{0} "
+        ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto certonly --webroot -w /srv/{0}/htdocs/ -d {0} -d www.{0} "
                                 .format(ee_domain_name)
                                 + "--email {0} --text --agree-tos".format(ee_wp_email))
     if ssl:
@@ -1347,9 +1347,9 @@ def setupLetsEncrypt(self, ee_domain_name):
         Log.info(self, "Configuring Nginx SSL configuration")
 
         try:
-            Log.info(self, "Adding /var/www/{0}/conf/nginx/ssl.conf".format(ee_domain_name))
+            Log.info(self, "Adding /srv/{0}/conf/nginx/ssl.conf".format(ee_domain_name))
 
-            sslconf = open("/var/www/{0}/conf/nginx/ssl.conf"
+            sslconf = open("/srv/{0}/conf/nginx/ssl.conf"
                                       .format(ee_domain_name),
                                       encoding='utf-8', mode='w')
             sslconf.write("listen 443 ssl http2;\n"
@@ -1390,7 +1390,7 @@ def renewLetsEncrypt(self, ee_domain_name):
 
     Log.info(self, "Renewing SSl cert for https://{0}".format(ee_domain_name))
 
-    ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto --renew-by-default certonly --webroot -w /var/www/{0}/htdocs/ -d {0} -d www.{0} "
+    ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto --renew-by-default certonly --webroot -w /srv/{0}/htdocs/ -d {0} -d www.{0} "
                                 .format(ee_domain_name)
                                 + "--email {0} --text --agree-tos".format(ee_wp_email))
     mail_list = ''
@@ -1467,7 +1467,7 @@ def archivedCertificateHandle(self,domain,ee_wp_email):
             Log.error(self,"/etc/letsencrypt/live/{0}/cert.pem file is missing.".format(domain))
     if check_prompt == "1":
         Log.info(self,"Please Wait while we reinstall SSL Certificate for your site.\nIt may take time depending upon network.")
-        ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto certonly --reinstall --webroot -w /var/www/{0}/htdocs/ -d {0} -d www.{0} "
+        ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto certonly --reinstall --webroot -w /srv/{0}/htdocs/ -d {0} -d www.{0} "
                                 .format(domain)
                                 + "--email {0} --text --agree-tos".format(ee_wp_email))
     elif check_prompt == "2" :
@@ -1481,7 +1481,7 @@ def archivedCertificateHandle(self,domain,ee_wp_email):
 
     elif check_prompt == "3":
         Log.info(self,"Please Wait while we renew SSL Certificate for your site.\nIt may take time depending upon network.")
-        ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto --renew-by-default certonly --webroot -w /var/www/{0}/htdocs/ -d {0} -d www.{0} "
+        ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto --renew-by-default certonly --webroot -w /srv/{0}/htdocs/ -d {0} -d www.{0} "
                                 .format(domain)
                                 + "--email {0} --text --agree-tos".format(ee_wp_email))
     else:
@@ -1490,9 +1490,9 @@ def archivedCertificateHandle(self,domain,ee_wp_email):
     if os.path.isfile("{0}/conf/nginx/ssl.conf"
                               .format(domain)):
         Log.info(self, "Existing ssl.conf . Backing it up ..")
-        EEFileUtils.mvfile(self, "/var/www/{0}/conf/nginx/ssl.conf"
+        EEFileUtils.mvfile(self, "/srv/{0}/conf/nginx/ssl.conf"
                              .format(domain),
-                             '/var/www/{0}/conf/nginx/ssl.conf.bak'
+                             '/srv/{0}/conf/nginx/ssl.conf.bak'
                              .format(domain))
 
     return ssl

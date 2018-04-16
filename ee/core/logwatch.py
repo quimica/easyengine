@@ -20,7 +20,7 @@ class LogWatcher(object):
     >>> def callback(filename, lines):
     ...     print filename, lines
     ...
-    >>> l = LogWatcher("/var/www/example.com/logs", callback)
+    >>> l = LogWatcher("/srv/example.com/logs", callback)
     >>> l.loop()
     """
 

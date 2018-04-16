@@ -217,7 +217,7 @@ class EELogResetController(CementBaseController):
             self.app.pargs.mysql = True
 
         if self.app.pargs.slow_log_db:
-            if os.path.isdir("/var/www/22222/htdocs/db/anemometer"):
+            if os.path.isdir("/srv/22222/htdocs/db/anemometer"):
                 Log.info(self, "Resetting MySQL slow_query_log database table")
                 EEMysql.execute(self, "TRUNCATE TABLE  "
                                 "slow_query_log.global_query_review_history")
