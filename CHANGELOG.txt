@@ -338,7 +338,7 @@ v 2.0.0 - July 14, 2014
   - Updated wp-cli to 0.16.0
   - Introduced ee secure command
   - Changed the way to update EasyEngine #179
-  - Fixed security on 22222 port by @RenzoF #263
+  - Fixed security on 60089 port by @RenzoF #263
   - Fixed MySQL stopped in ee stack status #233
   - Added WordPress SEO Yoast plugin support in wpcommon.conf #165
   - Depricated ee system command with ee stack command
@@ -391,7 +391,7 @@ v 1.3.0 - Apr 11, 2014
   - Introduce `ee debug` command
   - Introduce `ee system [status|stop|start|restart]` command
 
-  - EasyEngine Admin Tools shifted on port `22222` with self signed SSL Certificate #124
+  - EasyEngine Admin Tools shifted on port `60089` with self signed SSL Certificate #124
   - Setup Separate PHP5-FPM Pool on Port 9001 for debugging purpose
   - Polish `ee site edit` command #157
   - Fixed MySQL Username Character Limit #113

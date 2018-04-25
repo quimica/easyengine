@@ -1,7 +1,7 @@
 install:        ee_webroot="/srv/$site"
 ee/core/logwatch.py:    >>> l = LogWatcher("/srv/example.com/logs", callback)
 ee/core/variables.py:    ee_webroot = '/srv/'
-ee/cli/plugins/log.py:            if os.path.isdir("/srv/22222/htdocs/db/anemometer"):
+ee/cli/plugins/log.py:            if os.path.isdir("/srv/60089/htdocs/db/anemometer"):
 ee/cli/plugins/site_functions.py:    if (webroot == "/srv/" or webroot == "/srv"
 ee/cli/plugins/site_functions.py:       or webroot == "/srv/.." or webroot == "/srv/."):
 ee/cli/plugins/site_functions.py:        ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto certonly --webroot -w /srv/{0}/htdocs/ -d {0} -d www.{0} "
@@ -12,9 +12,9 @@ ee/cli/plugins/site_functions.py:        ssl = EEShellExec.cmd_exec(self, "./let
 ee/cli/plugins/site_functions.py:        ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto --renew-by-default certonly --webroot -w /srv/{0}/htdocs/ -d {0} -d www.{0} "
 ee/cli/plugins/site_functions.py:        EEFileUtils.mvfile(self, "/srv/{0}/conf/nginx/ssl.conf"
 ee/cli/plugins/site_functions.py:                             '/srv/{0}/conf/nginx/ssl.conf.bak'
-ee/cli/templates/virtualconf-php7.mustache:    {{#vma}}root /srv/22222/htdocs/vimbadmin/public;{{/vma}}
+ee/cli/templates/virtualconf-php7.mustache:    {{#vma}}root /srv/60089/htdocs/vimbadmin/public;{{/vma}}
 ee/cli/templates/virtualconf-php7.mustache:    {{#rc}}root /srv/roundcubemail/htdocs/;{{/rc}}
-ee/cli/templates/virtualconf.mustache:    {{#vma}}root /srv/22222/htdocs/vimbadmin/public;{{/vma}}
+ee/cli/templates/virtualconf.mustache:    {{#vma}}root /srv/60089/htdocs/vimbadmin/public;{{/vma}}
 ee/cli/templates/virtualconf.mustache:    {{#rc}}root /srv/roundcubemail/htdocs/;{{/rc}}
 ee/cli/templates/vimbadmin.mustache:archive.path = "/srv/archives"
 .travis.yml:  - sudo ls /srv/

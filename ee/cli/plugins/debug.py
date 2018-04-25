@@ -800,22 +800,22 @@ class EEDebugController(CementBaseController):
     @expose(hide=True)
     def import_slow_log(self):
         """Default function for import slow log"""
-        if os.path.isdir("{0}22222/htdocs/db/anemometer"
+        if os.path.isdir("{0}60089/htdocs/db/anemometer"
                          .format(EEVariables.ee_webroot)):
             if os.path.isfile("/var/log/mysql/mysql-slow.log"):
                 # Get Anemometer user name and password
                 Log.info(self, "Importing MySQL slow log to Anemometer")
-                host = os.popen("grep -e \"\'host\'\" {0}22222/htdocs/"
+                host = os.popen("grep -e \"\'host\'\" {0}60089/htdocs/"
                                 .format(EEVariables.ee_webroot)
                                 + "db/anemometer/conf/config.inc.php  "
                                 "| head -1 | cut -d\\\' -f4 | "
                                 "tr -d '\n'").read()
-                user = os.popen("grep -e \"\'user\'\" {0}22222/htdocs/"
+                user = os.popen("grep -e \"\'user\'\" {0}60089/htdocs/"
                                 .format(EEVariables.ee_webroot)
                                 + "db/anemometer/conf/config.inc.php  "
                                 "| head -1 | cut -d\\\' -f4 | "
                                 "tr -d '\n'").read()
-                password = os.popen("grep -e \"\'password\'\" {0}22222/"
+                password = os.popen("grep -e \"\'password\'\" {0}60089/"
                                     .format(EEVariables.ee_webroot)
                                     + "htdocs/db/anemometer/conf"
                                     "/config.inc.php "

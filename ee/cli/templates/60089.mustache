@@ -2,24 +2,24 @@
 
 server {
 
-  listen 22222 default_server ssl http2;
+  listen 60089 default_server ssl http2;
 
-  access_log   /var/log/nginx/22222.access.log rt_cache;
-  error_log    /var/log/nginx/22222.error.log;
+  access_log   /var/log/nginx/60089.access.log rt_cache;
+  error_log    /var/log/nginx/60089.error.log;
 
-  ssl_certificate {{webroot}}22222/cert/22222.crt;
-  ssl_certificate_key {{webroot}}22222/cert/22222.key;
+  ssl_certificate {{webroot}}60089/cert/60089.crt;
+  ssl_certificate_key {{webroot}}60089/cert/60089.key;
 
   # Force HTTP to HTTPS
-  error_page 497 =200 https://$host:22222$request_uri;
+  error_page 497 =200 https://$host:60089$request_uri;
 
-  root {{webroot}}22222/htdocs;
+  root {{webroot}}60089/htdocs;
   index index.php index.htm index.html;
 
   # Turn on directory listing
   autoindex on;
 
-  # HTTP Authentication on port 22222
+  # HTTP Authentication on port 60089
   include common/acl.conf;
 
   location / {
@@ -44,20 +44,20 @@ server {
 
   # ViMbAdmin Rules
   location = /vimbadmin/ {
-    return 301 $scheme://$host:22222/vimbadmin/public/;
+    return 301 $scheme://$host:60089/vimbadmin/public/;
   }
 
   location ~* \.(js|css|jpg|gif|png)$ {
-    root {{webroot}}22222/htdocs/;
+    root {{webroot}}60089/htdocs/;
   }
 
   location ~* /vimbadmin/public/(.*)/(.*) {
-    root {{webroot}}22222/htdocs/vimbadmin/public;
+    root {{webroot}}60089/htdocs/vimbadmin/public;
     try_files $uri $uri/  /vimbadmin/public/index.php?$args;
   }
 
   location ~* /vimbadmin/public/(.*) {
-    root {{webroot}}22222/htdocs/vimbadmin/public;
+    root {{webroot}}60089/htdocs/vimbadmin/public;
     try_files $uri $uri/  /vimbadmin/public/index.php?$args;
   }
 

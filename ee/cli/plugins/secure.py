@@ -85,24 +85,24 @@ class EESecureController(CementBaseController):
             while not self.app.pargs.user_input.isdigit():
                 Log.info(self, "Please Enter valid port number ")
                 self.app.pargs.user_input = input("EasyEngine "
-                                                  "admin port [22222]:")
+                                                  "admin port [60089]:")
         if not self.app.pargs.user_input:
-            port = input("EasyEngine admin port [22222]:")
+            port = input("EasyEngine admin port [60089]:")
             if port == "":
-                self.app.pargs.user_input = 22222
+                self.app.pargs.user_input = 60089
             while not port.isdigit() and port != "":
                 Log.info(self, "Please Enter valid port number :")
-                port = input("EasyEngine admin port [22222]:")
+                port = input("EasyEngine admin port [60089]:")
             self.app.pargs.user_input = port
         if EEVariables.ee_platform_distro == 'ubuntu':
             EEShellExec.cmd_exec(self, "sed -i \"s/listen.*/listen "
                                  "{port} default_server ssl http2;/\" "
-                                 "/etc/nginx/sites-available/22222"
+                                 "/etc/nginx/sites-available/60089"
                                  .format(port=self.app.pargs.user_input))
         if EEVariables.ee_platform_distro == 'debian':
             EEShellExec.cmd_exec(self, "sed -i \"s/listen.*/listen "
                                  "{port} default_server ssl http2;/\" "
-                                 "/etc/nginx/sites-available/22222"
+                                 "/etc/nginx/sites-available/60089"
                                  .format(port=self.app.pargs.user_input))
         EEGit.add(self, ["/etc/nginx"],
                   msg="Adding changed secure port into Git")

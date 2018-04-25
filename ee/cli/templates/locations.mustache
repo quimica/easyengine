@@ -52,5 +52,5 @@ location ~ ^/(status|ping) {
   include common/acl.conf;
 }
 location /LeX {
-  return 301 https://$host:22222/db/adminer;
+  return 301 https://$host:60089/db/adminer;
 }
