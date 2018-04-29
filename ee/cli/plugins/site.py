@@ -371,8 +371,8 @@ class EESiteCreateController(CementBaseController):
                 dict(help="create HHVM site", action='store_true')),
             (['--pagespeed'],
                 dict(help="create pagespeed site", action='store_true')),
-            (['-le','--letsencrypt'],
-                dict(help="configure letsencrypt ssl for the site", action='store_true')),
+            #(['-le','--letsencrypt'],
+            #    dict(help="configure letsencrypt ssl for the site", action='store_true')),
             (['--user'],
                 dict(help="provide user for wordpress site")),
             (['--email'],
@@ -385,7 +385,10 @@ class EESiteCreateController(CementBaseController):
             (['--experimental'],
                 dict(help="Enable Experimenal packages without prompt",
                      action='store_true')),
+            (['--ssl'],
+                dict(help="enable ssl for the site", action='store_true')),            
             ]
+
 
     @expose(hide=True)
     def default(self):
@@ -833,7 +836,33 @@ class EESiteCreateController(CementBaseController):
                 Log.info(self, "Not using Let\'s encrypt for Site "
                          " http://{0}".format(ee_domain))
 
+        if self.app.pargs.ssl :
+            if (not self.app.pargs.experimental):
+                # Check prompt
+                check_prompt = input("Type \"y\" to continue [n]:")
+                if check_prompt != "Y" and check_prompt != "y":
+                    data['ssl'] = False
+                    letsencrypt = False
+                else:
+                    data['ssl'] = True
+                    letsencrypt = True
+            else:
+                 data['ssl'] = True
+                 letsencrypt = True
 
+            if data['ssl'] is True:
+                 httpsRedirect(self,ee_domain)
+
+                 if not EEService.reload_service(self, 'nginx'):
+                    Log.error(self, "service nginx reload failed. "
+                          "check issues with `nginx -t` command")
+
+                 Log.info(self, "Congratulations! Successfully Enabled SSl for Site "
+                         " https://{0}".format(ee_domain))
+
+            elif data['ssl'] is False:
+                Log.info(self, "Not using Let\'s encrypt for Site "
+                         " http://{0}".format(ee_domain))
 
 
 class EESiteUpdateController(CementBaseController):
@@ -1475,6 +1504,45 @@ class EESiteUpdateController(CementBaseController):
                           msg="Adding letsencrypts config of site: {0}"
                         .format(ee_domain))
             updateSiteInfo(self, ee_domain, ssl=letsencrypt)
+            return 0
+
+        if pargs.ssl:
+            if data['ssl'] is True:
+                if not os.path.isfile("{0}/conf/nginx/ssl.conf.disabled"
+                              .format(ee_site_webroot)):
+                    setupLetsEncrypt(self, ee_domain)
+
+                else:
+                    EEFileUtils.mvfile(self, "{0}/conf/nginx/ssl.conf.disabled"
+                               .format(ee_site_webroot),
+                               '{0}/conf/nginx/ssl.conf'
+                               .format(ee_site_webroot))
+
+                httpsRedirect(self,ee_domain)
+
+                if not EEService.reload_service(self, 'nginx'):
+                        Log.error(self, "service nginx reload failed. "
+                          "check issues with `nginx -t` command")
+
+                Log.info(self, "Congratulations! Successfully Enabled SSl for Site "
+                         " https://{0}".format(ee_domain))
+
+            elif data['ssl'] is False:
+                if os.path.isfile("{0}/conf/nginx/ssl.conf"
+                          .format(ee_site_webroot)):
+                        Log.info(self,'Setting Nginx configuration')
+                        EEFileUtils.mvfile(self, "{0}/conf/nginx/ssl.conf"
+                                  .format(ee_site_webroot),
+                                  '{0}/conf/nginx/ssl.conf.disabled'
+                                  .format(ee_site_webroot))
+                        httpsRedirect(self,ee_domain,False)
+                        if not EEService.reload_service(self, 'nginx'):
+                            Log.error(self, "service nginx reload failed. "
+                                 "check issues with `nginx -t` command")
+
+                        Log.info(self, "Successfully Disabled SSl for Site "
+                         " http://{0}".format(ee_domain))
+
             return 0
 
         if stype == oldsitetype and cache == oldcachetype:
