@@ -384,9 +384,7 @@ class EESiteCreateController(CementBaseController):
                 dict(help="create proxy for site", nargs='+')),
             (['--experimental'],
                 dict(help="Enable Experimenal packages without prompt",
-                     action='store_true')),
-            (['--ssl'],
-                dict(help="enable ssl for the site", action='store_true')),            
+                     action='store_true')),          
             ]
 
 
@@ -788,19 +786,6 @@ class EESiteCreateController(CementBaseController):
 
         if self.app.pargs.letsencrypt :
             if (not self.app.pargs.experimental):
-                if stype in ['wpsubdomain']:
-	                    Log.warn(self, "Wildcard domains are not supported in Lets Encrypt.\nWP SUBDOMAIN site will get SSL for primary site only.")
-
-                Log.info(self, "Letsencrypt is currently in beta phase."
-                             " \nDo you wish"
-                             " to enable SSl now for {0}?".format(ee_domain))
-
-                # Check prompt
-                check_prompt = input("Type \"y\" to continue [n]:")
-                if check_prompt != "Y" and check_prompt != "y":
-                    data['letsencrypt'] = False
-                    letsencrypt = False
-                else:
                     data['letsencrypt'] = True
                     letsencrypt = True
             else:
@@ -808,23 +793,14 @@ class EESiteCreateController(CementBaseController):
                  letsencrypt = True
 
             if data['letsencrypt'] is True:
-                 setupLetsEncrypt(self, ee_domain)
                  httpsRedirect(self,ee_domain)
-                 Log.info(self,"Creating Cron Job for cert auto-renewal")
-                 EECron.setcron_weekly(self,'ee site update --le=renew --all 2> /dev/null'.format(ee_domain),'Renew all'
-                                                                     ' letsencrypt SSL cert. Set by EasyEngine')
 
                  if not EEService.reload_service(self, 'nginx'):
                     Log.error(self, "service nginx reload failed. "
                           "check issues with `nginx -t` command")
 
-                 Log.info(self, "Congratulations! Successfully Configured SSl for Site "
+                 Log.info(self, "Congratulations! Successfully Enabled SSl for Site "
                          " https://{0}".format(ee_domain))
-
-                 if (SSL.getExpirationDays(self,ee_domain)>0):
-                    Log.info(self, "Your cert will expire within " + str(SSL.getExpirationDays(self,ee_domain)) + " days.")
-                 else:
-                    Log.warn(self, "Your cert already EXPIRED ! .PLEASE renew soon . ")
 
                  # Add nginx conf folder into GIT
                  EEGit.add(self, ["{0}/conf/nginx".format(ee_site_webroot)],
@@ -835,35 +811,6 @@ class EESiteCreateController(CementBaseController):
             elif data['letsencrypt'] is False:
                 Log.info(self, "Not using Let\'s encrypt for Site "
                          " http://{0}".format(ee_domain))
-
-        if self.app.pargs.ssl :
-            if (not self.app.pargs.experimental):
-                # Check prompt
-                check_prompt = input("Type \"y\" to continue [n]:")
-                if check_prompt != "Y" and check_prompt != "y":
-                    data['ssl'] = False
-                    letsencrypt = False
-                else:
-                    data['ssl'] = True
-                    letsencrypt = True
-            else:
-                 data['ssl'] = True
-                 letsencrypt = True
-
-            if data['ssl'] is True:
-                 httpsRedirect(self,ee_domain)
-
-                 if not EEService.reload_service(self, 'nginx'):
-                    Log.error(self, "service nginx reload failed. "
-                          "check issues with `nginx -t` command")
-
-                 Log.info(self, "Congratulations! Successfully Enabled SSl for Site "
-                         " https://{0}".format(ee_domain))
-
-            elif data['ssl'] is False:
-                Log.info(self, "Not using Let\'s encrypt for Site "
-                         " http://{0}".format(ee_domain))
-
 
 class EESiteUpdateController(CementBaseController):
     class Meta:
@@ -1465,21 +1412,13 @@ class EESiteUpdateController(CementBaseController):
                                .format(ee_site_webroot))
 
                 httpsRedirect(self,ee_domain)
-                Log.info(self,"Creating Cron Job for cert auto-renewal")
-                EECron.setcron_weekly(self,'ee site update --le=renew --all 2> /dev/null'.format(ee_domain),'Renew all'
-                                                                ' letsencrypt SSL cert. Set by EasyEngine')
 
                 if not EEService.reload_service(self, 'nginx'):
                         Log.error(self, "service nginx reload failed. "
                           "check issues with `nginx -t` command")
 
-                Log.info(self, "Congratulations! Successfully Configured SSl for Site "
+                Log.info(self, "Congratulations! Successfully Enabled SSl for Site "
                          " https://{0}".format(ee_domain))
-
-                if (SSL.getExpirationDays(self,ee_domain)>0):
-                    Log.info(self, "Your cert will expire within " + str(SSL.getExpirationDays(self,ee_domain)) + " days.")
-                else:
-                    Log.warn(self, "Your cert already EXPIRED ! .PLEASE renew soon . ")
 
             elif data['letsencrypt'] is False:
                 if os.path.isfile("{0}/conf/nginx/ssl.conf"
@@ -1504,45 +1443,6 @@ class EESiteUpdateController(CementBaseController):
                           msg="Adding letsencrypts config of site: {0}"
                         .format(ee_domain))
             updateSiteInfo(self, ee_domain, ssl=letsencrypt)
-            return 0
-
-        if pargs.ssl:
-            if data['ssl'] is True:
-                if not os.path.isfile("{0}/conf/nginx/ssl.conf.disabled"
-                              .format(ee_site_webroot)):
-                    setupLetsEncrypt(self, ee_domain)
-
-                else:
-                    EEFileUtils.mvfile(self, "{0}/conf/nginx/ssl.conf.disabled"
-                               .format(ee_site_webroot),
-                               '{0}/conf/nginx/ssl.conf'
-                               .format(ee_site_webroot))
-
-                httpsRedirect(self,ee_domain)
-
-                if not EEService.reload_service(self, 'nginx'):
-                        Log.error(self, "service nginx reload failed. "
-                          "check issues with `nginx -t` command")
-
-                Log.info(self, "Congratulations! Successfully Enabled SSl for Site "
-                         " https://{0}".format(ee_domain))
-
-            elif data['ssl'] is False:
-                if os.path.isfile("{0}/conf/nginx/ssl.conf"
-                          .format(ee_site_webroot)):
-                        Log.info(self,'Setting Nginx configuration')
-                        EEFileUtils.mvfile(self, "{0}/conf/nginx/ssl.conf"
-                                  .format(ee_site_webroot),
-                                  '{0}/conf/nginx/ssl.conf.disabled'
-                                  .format(ee_site_webroot))
-                        httpsRedirect(self,ee_domain,False)
-                        if not EEService.reload_service(self, 'nginx'):
-                            Log.error(self, "service nginx reload failed. "
-                                 "check issues with `nginx -t` command")
-
-                        Log.info(self, "Successfully Disabled SSl for Site "
-                         " http://{0}".format(ee_domain))
-
             return 0
 
         if stype == oldsitetype and cache == oldcachetype:

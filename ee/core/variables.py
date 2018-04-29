@@ -14,8 +14,8 @@ class EEVariables():
     # EasyEngine version
     ee_version = "3.7.5"
     # EasyEngine packages versions
-    ee_wp_cli = "1.4.1"
-    ee_adminer = "4.2.5"
+    ee_wp_cli = "1.5.0"
+    ee_adminer = "4.6.2"
     ee_roundcube = "1.1.4"
    # ee_vimbadmin = "3.0.12"
     ee_vimbadmin = "master"

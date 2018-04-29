@@ -2001,7 +2001,7 @@ class EEStackController(CementBaseController):
                                 .format(EEVariables.ee_webroot))
                 shutil.move('/tmp/roundcubemail-{0}/'
                             .format(EEVariables.ee_roundcube),
-                            '{0}roundcubemail/htdocs/www'
+                            '{0}roundcubemail/htdocs'
                             .format(EEVariables.ee_webroot))
 
                 #Fix pear install config for trusty
@@ -2036,21 +2036,21 @@ class EEStackController(CementBaseController):
                                                'mysql', 'grant-host'),
                                                rc_passwd))
                 EEShellExec.cmd_exec(self, "mysql roundcubemail < {0}"
-                                     "roundcubemail/htdocs/www/SQL/mysql"
+                                     "roundcubemail/htdocs/SQL/mysql"
                                      ".initial.sql"
                                      .format(EEVariables.ee_webroot))
 
-                shutil.copyfile("{0}roundcubemail/htdocs/www/config/"
+                shutil.copyfile("{0}roundcubemail/htdocs/config/"
                                 "config.inc.php.sample"
                                 .format(EEVariables.ee_webroot),
-                                "{0}roundcubemail/htdocs/www/config/"
+                                "{0}roundcubemail/htdocs/config/"
                                 "config.inc.php"
                                 .format(EEVariables.ee_webroot))
                 EEShellExec.cmd_exec(self, "sed -i \"s\'mysql://roundcube:"
                                      "pass@localhost/roundcubemail\'mysql://"
                                      "roundcube:{0}@{1}/"
                                      "roundcubemail\'\" {2}roundcubemail"
-                                     "/htdocs/www/config/config."
+                                     "/htdocs/config/config."
                                      "inc.php"
                                      .format(rc_passwd,
                                              EEVariables.ee_mysql_host,
@@ -2061,13 +2061,13 @@ class EEStackController(CementBaseController):
                                      "\'plugins\'\] "
                                      "= array(:\$config\['plugins'\] =  "
                                      "array(\\n    \'sieverules\',:\\\" "
-                                     "{0}roundcubemail/htdocs/www/config"
+                                     "{0}roundcubemail/htdocs/config"
                                      .format(EEVariables.ee_webroot)
                                      + "/config.inc.php\"")
                 EEShellExec.cmd_exec(self, "echo \"\$config['sieverules_port']"
                                      "=4190;\" >> {0}roundcubemail"
                                      .format(EEVariables.ee_webroot)
-                                     + "/htdocs/www/config/config.inc.php")
+                                     + "/htdocs/config/config.inc.php")
 
                 data = dict(site_name='webmail', www_domain='webmail',
                             static=False,
@@ -2109,7 +2109,7 @@ class EEStackController(CementBaseController):
                                            .format(EEVariables.ee_webroot)])
                 # Remove roundcube installer
                 EEService.reload_service(self, 'nginx')
-                EEFileUtils.remove(self, ["{0}roundcubemail/htdocs/www/installer"
+                EEFileUtils.remove(self, ["{0}roundcubemail/htdocs/installer"
                                    .format(EEVariables.ee_webroot)])
                 EEFileUtils.chown(self, '{0}roundcubemail'
                                   .format(EEVariables.ee_webroot),
@@ -2374,7 +2374,7 @@ class EEStackController(CementBaseController):
                                         "{0}/adminer-{0}.php"
                                         "".format(EEVariables.ee_adminer),
                                         "{0}60089/"
-                                        "htdocs/www/db/adminer/index.php"
+                                        "htdocs/db/adminer/index.php"
                                         .format(EEVariables.ee_webroot),
                                         "Adminer"]]
 
