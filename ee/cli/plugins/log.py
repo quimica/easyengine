@@ -122,22 +122,22 @@ class EELogShowController(CementBaseController):
                                        .format(EEVariables.ee_webroot,
                                                self.app.pargs.site_name)]
             if self.app.pargs.wp:
-                if os.path.isdir('{0}/htdocs/www/wp-content'.format(webroot)):
+                if os.path.isdir('{0}/htdocs/wp-content'.format(webroot)):
                     if not os.path.isfile('{0}/logs/debug.log'
                                           .format(webroot)):
-                        if not os.path.isfile('{0}/htdocs/www/wp-content/debug.log'
+                        if not os.path.isfile('{0}/htdocs/wp-content/debug.log'
                                               .format(webroot)):
-                            open("{0}/htdocs/www/wp-content/debug.log"
+                            open("{0}/htdocs/wp-content/debug.log"
                                  .format(webroot),
                                  encoding='utf-8', mode='a').close()
-                            EEShellExec.cmd_exec(self, "chown {1}: {0}/htdocs/www/"
+                            EEShellExec.cmd_exec(self, "chown {1}: {0}/htdocs/"
                                                  "wp-content/debug.log"
                                                  "".format(webroot,
                                                            EEVariables
                                                            .ee_php_user)
                                                  )
                     # create symbolic link for debug log
-                    EEFileUtils.create_symlink(self, ["{0}/htdocs/www/wp-content/"
+                    EEFileUtils.create_symlink(self, ["{0}/htdocs/wp-content/"
                                                       "debug.log"
                                                       .format(webroot),
                                                       '{0}/logs/debug.log'
@@ -217,7 +217,7 @@ class EELogResetController(CementBaseController):
             self.app.pargs.mysql = True
 
         if self.app.pargs.slow_log_db:
-            if os.path.isdir("/srv/60089/htdocs/www/db/anemometer"):
+            if os.path.isdir("/srv/60089/htdocs/db/anemometer"):
                 Log.info(self, "Resetting MySQL slow_query_log database table")
                 EEMysql.execute(self, "TRUNCATE TABLE  "
                                 "slow_query_log.global_query_review_history")
@@ -261,22 +261,22 @@ class EELogResetController(CementBaseController):
                                        .format(EEVariables.ee_webroot,
                                                self.app.pargs.site_name)]
             if self.app.pargs.wp:
-                if os.path.isdir('{0}/htdocs/www/wp-content'.format(webroot)):
+                if os.path.isdir('{0}/htdocs/wp-content'.format(webroot)):
                     if not os.path.isfile('{0}/logs/debug.log'
                                           .format(webroot)):
-                        if not os.path.isfile('{0}/htdocs/www/wp-content/debug.log'
+                        if not os.path.isfile('{0}/htdocs/wp-content/debug.log'
                                               .format(webroot)):
-                            open("{0}/htdocs/www/wp-content/debug.log"
+                            open("{0}/htdocs/wp-content/debug.log"
                                  .format(webroot),
                                  encoding='utf-8', mode='a').close()
-                            EEShellExec.cmd_exec(self, "chown {1}: {0}/htdocs/www/"
+                            EEShellExec.cmd_exec(self, "chown {1}: {0}/htdocs/"
                                                  "wp-content/debug.log"
                                                  "".format(webroot,
                                                            EEVariables
                                                            .ee_php_user)
                                                  )
                     # create symbolic link for debug log
-                    EEFileUtils.create_symlink(self, ["{0}/htdocs/www/wp-content/"
+                    EEFileUtils.create_symlink(self, ["{0}/htdocs/wp-content/"
                                                       "debug.log"
                                                       .format(webroot),
                                                       '{0}/logs/debug.log'
@@ -390,22 +390,22 @@ class EELogGzipController(CementBaseController):
                                        .format(EEVariables.ee_webroot,
                                                self.app.pargs.site_name)]
             if self.app.pargs.wp:
-                if os.path.isdir('{0}/htdocs/www/wp-content'.format(webroot)):
+                if os.path.isdir('{0}/htdocs/wp-content'.format(webroot)):
                     if not os.path.isfile('{0}/logs/debug.log'
                                           .format(webroot)):
-                        if not os.path.isfile('{0}/htdocs/www/wp-content/debug.log'
+                        if not os.path.isfile('{0}/htdocs/wp-content/debug.log'
                                               .format(webroot)):
-                            open("{0}/htdocs/www/wp-content/debug.log"
+                            open("{0}/htdocs/wp-content/debug.log"
                                  .format(webroot),
                                  encoding='utf-8', mode='a').close()
-                            EEShellExec.cmd_exec(self, "chown {1}: {0}/htdocs/www/"
+                            EEShellExec.cmd_exec(self, "chown {1}: {0}/htdocs/"
                                                  "wp-content/debug.log"
                                                  "".format(webroot,
                                                            EEVariables
                                                            .ee_php_user)
                                                  )
                     # create symbolic link for debug log
-                    EEFileUtils.create_symlink(self, ["{0}/htdocs/www/wp-content/"
+                    EEFileUtils.create_symlink(self, ["{0}/htdocs/wp-content/"
                                                       "debug.log"
                                                       .format(webroot),
                                                       '{0}/logs/debug.log'
@@ -526,22 +526,22 @@ class EELogMailController(CementBaseController):
                                        .format(EEVariables.ee_webroot,
                                                self.app.pargs.site_name)]
             if self.app.pargs.wp:
-                if os.path.isdir('{0}/htdocs/www/wp-content'.format(webroot)):
+                if os.path.isdir('{0}/htdocs/wp-content'.format(webroot)):
                     if not os.path.isfile('{0}/logs/debug.log'
                                           .format(webroot)):
-                        if not os.path.isfile('{0}/htdocs/www/wp-content/debug.log'
+                        if not os.path.isfile('{0}/htdocs/wp-content/debug.log'
                                               .format(webroot)):
-                            open("{0}/htdocs/www/wp-content/debug.log"
+                            open("{0}/htdocs/wp-content/debug.log"
                                  .format(webroot),
                                  encoding='utf-8', mode='a').close()
-                            EEShellExec.cmd_exec(self, "chown {1}: {0}/htdocs/www/"
+                            EEShellExec.cmd_exec(self, "chown {1}: {0}/htdocs/"
                                                  "wp-content/debug.log"
                                                  "".format(webroot,
                                                            EEVariables
                                                            .ee_php_user)
                                                  )
                     # create symbolic link for debug log
-                    EEFileUtils.create_symlink(self, ["{0}/htdocs/www/wp-content/"
+                    EEFileUtils.create_symlink(self, ["{0}/htdocs/wp-content/"
                                                       "debug.log"
                                                       .format(webroot),
                                                       '{0}/logs/debug.log'

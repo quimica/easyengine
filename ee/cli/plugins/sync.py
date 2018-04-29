@@ -38,14 +38,14 @@ class EESyncController(CementBaseController):
                 # Read config files
                 configfiles = glob.glob(ee_site_webroot + '/*-config.php')
 
-                #search for wp-config.php inside htdocs/www/
+                #search for wp-config.php inside htdocs/
                 if not configfiles:
                     Log.debug(self, "Config files not found in {0}/ "
                                       .format(ee_site_webroot))
                     if site.site_type != 'mysql':
-                        Log.debug(self, "Searching wp-config.php in {0}/htdocs/www/ "
+                        Log.debug(self, "Searching wp-config.php in {0}/htdocs/ "
                                       .format(ee_site_webroot))
-                        configfiles = glob.glob(ee_site_webroot + '/htdocs/www/wp-config.php')
+                        configfiles = glob.glob(ee_site_webroot + '/htdocs/wp-config.php')
 
                 if configfiles:
                     if EEFileUtils.isexist(self, configfiles[0]):

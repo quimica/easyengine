@@ -28,9 +28,9 @@ server {
     {{/proxy}}
 
     {{^proxy}}
-    {{^vma}}{{^rc}}root {{webroot}}/htdocs/www;{{/rc}}{{/vma}}
-    {{#vma}}root /srv/60089/htdocs/www/vimbadmin/public;{{/vma}}
-    {{#rc}}root /srv/roundcubemail/htdocs/www/;{{/rc}}
+    {{^vma}}{{^rc}}root {{webroot}}/htdocs;{{/rc}}{{/vma}}
+    {{#vma}}root /srv/60089/htdocs/vimbadmin/public;{{/vma}}
+    {{#rc}}root /srv/roundcubemail/htdocs/;{{/rc}}
 
     {{^proxy}}index {{^static}}index.php{{/static}} index.html index.htm;{{/proxy}}
 

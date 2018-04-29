@@ -110,11 +110,11 @@ def setupdomain(self, data):
     if 'proxy' in data.keys() and data['proxy']:
         return
 
-    # Creating htdocs/www & logs directory
+    # Creating htdocs & logs directory
     Log.info(self, "Setting up webroot \t\t", end='')
     try:
-        if not os.path.exists('{0}/htdocs/www'.format(ee_site_webroot)):
-            os.makedirs('{0}/htdocs/www'.format(ee_site_webroot))
+        if not os.path.exists('{0}/htdocs'.format(ee_site_webroot)):
+            os.makedirs('{0}/htdocs'.format(ee_site_webroot))
         if not os.path.exists('{0}/logs'.format(ee_site_webroot)):
             os.makedirs('{0}/logs'.format(ee_site_webroot))
         if not os.path.exists('{0}/conf/nginx'.format(ee_site_webroot)):
@@ -133,7 +133,7 @@ def setupdomain(self, data):
         raise SiteError("setup webroot failed for site")
     finally:
         # TODO Check if directories are setup
-        if (os.path.exists('{0}/htdocs/www'.format(ee_site_webroot)) and
+        if (os.path.exists('{0}/htdocs'.format(ee_site_webroot)) and
            os.path.exists('{0}/logs'.format(ee_site_webroot))):
             Log.info(self, "[" + Log.ENDC + "Done" + Log.OKBLUE + "]")
         else:
@@ -258,7 +258,7 @@ def setupwordpress(self, data):
         ee_wp_pass = data['wp-pass']
 
     Log.info(self, "Downloading WordPress \t\t", end='')
-    EEFileUtils.chdir(self, '{0}/htdocs/www/'.format(ee_site_webroot))
+    EEFileUtils.chdir(self, '{0}/htdocs/'.format(ee_site_webroot))
     try:
         if EEShellExec.cmd_exec(self, "wp --allow-root core"
                              " download"):
@@ -291,7 +291,7 @@ def setupwordpress(self, data):
 
     # Modify wp-config.php & move outside the webroot
 
-    EEFileUtils.chdir(self, '{0}/htdocs/www/'.format(ee_site_webroot))
+    EEFileUtils.chdir(self, '{0}/htdocs/'.format(ee_site_webroot))
     Log.debug(self, "Setting up wp-config file")
     if not data['multisite']:
         Log.debug(self, "Generating wp-config for WordPress Single site")
@@ -514,7 +514,7 @@ def setupwordpress(self, data):
 
 def setupwordpressnetwork(self, data):
     ee_site_webroot = data['webroot']
-    EEFileUtils.chdir(self, '{0}/htdocs/www/'.format(ee_site_webroot))
+    EEFileUtils.chdir(self, '{0}/htdocs/'.format(ee_site_webroot))
     Log.info(self, "Setting up WordPress Network \t", end='')
     try:
         if EEShellExec.cmd_exec(self, 'wp --allow-root core multisite-convert'
@@ -537,7 +537,7 @@ def installwp_plugin(self, plugin_name, data):
     ee_site_webroot = data['webroot']
     Log.info(self, "Installing plugin {0}, please wait..."
              .format(plugin_name))
-    EEFileUtils.chdir(self, '{0}/htdocs/www/'.format(ee_site_webroot))
+    EEFileUtils.chdir(self, '{0}/htdocs/'.format(ee_site_webroot))
     try:
         EEShellExec.cmd_exec(self, "php {0} plugin "
                              .format(EEVariables.ee_wpcli_path)
@@ -565,7 +565,7 @@ def uninstallwp_plugin(self, plugin_name, data):
     ee_site_webroot = data['webroot']
     Log.debug(self, "Uninstalling plugin {0}, please wait..."
               .format(plugin_name))
-    EEFileUtils.chdir(self, '{0}/htdocs/www/'.format(ee_site_webroot))
+    EEFileUtils.chdir(self, '{0}/htdocs/'.format(ee_site_webroot))
     Log.info(self, "Uninstalling plugin {0}, please wait..."
              .format(plugin_name))
     try:
@@ -585,7 +585,7 @@ def setupwp_plugin(self, plugin_name, plugin_option, plugin_data, data):
     ee_site_webroot = data['webroot']
     Log.info(self, "Setting plugin {0}, please wait..."
              .format(plugin_name))
-    EEFileUtils.chdir(self, '{0}/htdocs/www/'.format(ee_site_webroot))
+    EEFileUtils.chdir(self, '{0}/htdocs/'.format(ee_site_webroot))
 
     if not data['multisite']:
         try:
@@ -629,24 +629,24 @@ def sitebackup(self, data):
     if data['currsitetype'] in ['html', 'php', 'proxy', 'mysql']:
         if data['php7'] is True and not data['wp']:
             Log.info(self, "Backing up Webroot \t\t", end='')
-            EEFileUtils.copyfiles(self, ee_site_webroot + '/htdocs/www', backup_path + '/htdocs/www')
+            EEFileUtils.copyfiles(self, ee_site_webroot + '/htdocs', backup_path + '/htdocs')
             Log.info(self, "[" + Log.ENDC + "Done" + Log.OKBLUE + "]")
         else:
             Log.info(self, "Backing up Webroot \t\t", end='')
-            EEFileUtils.mvfile(self, ee_site_webroot + '/htdocs/www', backup_path)
+            EEFileUtils.mvfile(self, ee_site_webroot + '/htdocs', backup_path)
             Log.info(self, "[" + Log.ENDC + "Done" + Log.OKBLUE + "]")
 
     configfiles = glob.glob(ee_site_webroot + '/*-config.php')
     if not configfiles:
-        #search for wp-config.php inside htdocs/www/
+        #search for wp-config.php inside htdocs/
         Log.debug(self, "Config files not found in {0}/ "
                           .format(ee_site_webroot))
         if data['currsitetype'] in ['mysql']:
             pass
         else:
-            Log.debug(self, "Searching wp-config.php in {0}/htdocs/www/ "
+            Log.debug(self, "Searching wp-config.php in {0}/htdocs/ "
                                    .format(ee_site_webroot))
-            configfiles = glob.glob(ee_site_webroot + '/htdocs/www/wp-config.php')
+            configfiles = glob.glob(ee_site_webroot + '/htdocs/wp-config.php')
 
     # if configfiles and EEFileUtils.isexist(self, configfiles[0]):
     #     ee_db_name = (EEFileUtils.grep(self, configfiles[0],
@@ -963,7 +963,7 @@ def updatewpuserpassword(self, ee_domain, ee_site_webroot):
 
     ee_wp_user = ''
     ee_wp_pass = ''
-    EEFileUtils.chdir(self, '{0}/htdocs/www/'.format(ee_site_webroot))
+    EEFileUtils.chdir(self, '{0}/htdocs/'.format(ee_site_webroot))
 
     # Check if ee_domain is wordpress install
     try:
@@ -1337,7 +1337,7 @@ def setupLetsEncrypt(self, ee_domain_name):
         ssl= archivedCertificateHandle(self,ee_domain_name,ee_wp_email)
     else:
         Log.warn(self,"Please Wait while we fetch SSL Certificate for your site.\nIt may take time depending upon network.")
-        ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto certonly --webroot -w /srv/{0}/htdocs/www/ -d {0} -d www.{0} "
+        ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto certonly --webroot -w /srv/{0}/htdocs/ -d {0} -d www.{0} "
                                 .format(ee_domain_name)
                                 + "--email {0} --text --agree-tos".format(ee_wp_email))
     if ssl:
@@ -1390,7 +1390,7 @@ def renewLetsEncrypt(self, ee_domain_name):
 
     Log.info(self, "Renewing SSl cert for https://{0}".format(ee_domain_name))
 
-    ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto --renew-by-default certonly --webroot -w /srv/{0}/htdocs/www/ -d {0} -d www.{0} "
+    ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto --renew-by-default certonly --webroot -w /srv/{0}/htdocs/ -d {0} -d www.{0} "
                                 .format(ee_domain_name)
                                 + "--email {0} --text --agree-tos".format(ee_wp_email))
     mail_list = ''
@@ -1467,7 +1467,7 @@ def archivedCertificateHandle(self,domain,ee_wp_email):
             Log.error(self,"/etc/letsencrypt/live/{0}/cert.pem file is missing.".format(domain))
     if check_prompt == "1":
         Log.info(self,"Please Wait while we reinstall SSL Certificate for your site.\nIt may take time depending upon network.")
-        ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto certonly --reinstall --webroot -w /srv/{0}/htdocs/www/ -d {0} -d www.{0} "
+        ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto certonly --reinstall --webroot -w /srv/{0}/htdocs/ -d {0} -d www.{0} "
                                 .format(domain)
                                 + "--email {0} --text --agree-tos".format(ee_wp_email))
     elif check_prompt == "2" :
@@ -1481,7 +1481,7 @@ def archivedCertificateHandle(self,domain,ee_wp_email):
 
     elif check_prompt == "3":
         Log.info(self,"Please Wait while we renew SSL Certificate for your site.\nIt may take time depending upon network.")
-        ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto --renew-by-default certonly --webroot -w /srv/{0}/htdocs/www/ -d {0} -d www.{0} "
+        ssl = EEShellExec.cmd_exec(self, "./letsencrypt-auto --renew-by-default certonly --webroot -w /srv/{0}/htdocs/ -d {0} -d www.{0} "
                                 .format(domain)
                                 + "--email {0} --text --agree-tos".format(ee_wp_email))
     else:

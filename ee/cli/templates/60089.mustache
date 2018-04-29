@@ -13,7 +13,7 @@ server {
   # Force HTTP to HTTPS
   error_page 497 =200 https://$host:60089$request_uri;
 
-  root {{webroot}}60089/htdocs/www;
+  root {{webroot}}60089/htdocs;
   index index.php index.htm index.html;
 
   # Turn on directory listing
@@ -48,16 +48,16 @@ server {
   }
 
   location ~* \.(js|css|jpg|gif|png)$ {
-    root {{webroot}}60089/htdocs/www/;
+    root {{webroot}}60089/htdocs/;
   }
 
   location ~* /vimbadmin/public/(.*)/(.*) {
-    root {{webroot}}60089/htdocs/www/vimbadmin/public;
+    root {{webroot}}60089/htdocs/vimbadmin/public;
     try_files $uri $uri/  /vimbadmin/public/index.php?$args;
   }
 
   location ~* /vimbadmin/public/(.*) {
-    root {{webroot}}60089/htdocs/www/vimbadmin/public;
+    root {{webroot}}60089/htdocs/vimbadmin/public;
     try_files $uri $uri/  /vimbadmin/public/index.php?$args;
   }
 

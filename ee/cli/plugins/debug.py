@@ -449,18 +449,18 @@ class EEDebugController(CementBaseController):
                                  self.app.pargs.site_name))
             webroot = "{0}{1}".format(EEVariables.ee_webroot,
                                       self.app.pargs.site_name)
-            # Check wp-config.php file into htdocs/www folder
+            # Check wp-config.php file into htdocs folder
             if not os.path.isfile(wp_config):
-                wp_config = ("{0}/{1}/htdocs/www/wp-config.php"
+                wp_config = ("{0}/{1}/htdocs/wp-config.php"
                              .format(EEVariables.ee_webroot,
                                      self.app.pargs.site_name))
             if os.path.isfile(wp_config):
                 if not EEShellExec.cmd_exec(self, "grep \"\'WP_DEBUG\'\" {0} |"
                                             " grep true".format(wp_config)):
                     Log.info(self, "Starting WordPress debug")
-                    open("{0}/htdocs/www/wp-content/debug.log".format(webroot),
+                    open("{0}/htdocs/wp-content/debug.log".format(webroot),
                          encoding='utf-8', mode='a').close()
-                    EEShellExec.cmd_exec(self, "chown {1}: {0}/htdocs/www/wp-"
+                    EEShellExec.cmd_exec(self, "chown {1}: {0}/htdocs/wp-"
                                          "content/debug.log"
                                          "".format(webroot,
                                                    EEVariables.ee_php_user))
@@ -470,16 +470,16 @@ class EEDebugController(CementBaseController):
                                          "\\ndefine(\'WP_DEBUG_LOG\', true);"
                                          "\\ndefine(\'SAVEQUERIES\', true);/\""
                                          " {0}".format(wp_config))
-                    EEShellExec.cmd_exec(self, "cd {0}/htdocs/www/ && wp"
+                    EEShellExec.cmd_exec(self, "cd {0}/htdocs/ && wp"
                                          " plugin --allow-root install "
                                          "developer query-monitor"
                                          .format(webroot))
-                    EEShellExec.cmd_exec(self, "chown -R {1}: {0}/htdocs/www/"
+                    EEShellExec.cmd_exec(self, "chown -R {1}: {0}/htdocs/"
                                          "wp-content/plugins"
                                          .format(webroot,
                                                  EEVariables.ee_php_user))
 
-                self.msg = self.msg + ['{0}{1}/htdocs/www/wp-content'
+                self.msg = self.msg + ['{0}{1}/htdocs/wp-content'
                                        '/debug.log'
                                        .format(EEVariables.ee_webroot,
                                                self.app.pargs.site_name)]
@@ -494,9 +494,9 @@ class EEDebugController(CementBaseController):
                                  self.app.pargs.site_name))
             webroot = "{0}{1}".format(EEVariables.ee_webroot,
                                       self.app.pargs.site_name)
-            # Check wp-config.php file into htdocs/www folder
+            # Check wp-config.php file into htdocs folder
             if not os.path.isfile(wp_config):
-                wp_config = ("{0}/{1}/htdocs/www/wp-config.php"
+                wp_config = ("{0}/{1}/htdocs/wp-config.php"
                              .format(EEVariables.ee_webroot,
                                      self.app.pargs.site_name))
             if os.path.isfile(wp_config):
@@ -800,24 +800,24 @@ class EEDebugController(CementBaseController):
     @expose(hide=True)
     def import_slow_log(self):
         """Default function for import slow log"""
-        if os.path.isdir("{0}60089/htdocs/www/db/anemometer"
+        if os.path.isdir("{0}60089/htdocs/db/anemometer"
                          .format(EEVariables.ee_webroot)):
             if os.path.isfile("/var/log/mysql/mysql-slow.log"):
                 # Get Anemometer user name and password
                 Log.info(self, "Importing MySQL slow log to Anemometer")
-                host = os.popen("grep -e \"\'host\'\" {0}60089/htdocs/www/"
+                host = os.popen("grep -e \"\'host\'\" {0}60089/htdocs/"
                                 .format(EEVariables.ee_webroot)
                                 + "db/anemometer/conf/config.inc.php  "
                                 "| head -1 | cut -d\\\' -f4 | "
                                 "tr -d '\n'").read()
-                user = os.popen("grep -e \"\'user\'\" {0}60089/htdocs/www/"
+                user = os.popen("grep -e \"\'user\'\" {0}60089/htdocs/"
                                 .format(EEVariables.ee_webroot)
                                 + "db/anemometer/conf/config.inc.php  "
                                 "| head -1 | cut -d\\\' -f4 | "
                                 "tr -d '\n'").read()
                 password = os.popen("grep -e \"\'password\'\" {0}60089/"
                                     .format(EEVariables.ee_webroot)
-                                    + "htdocs/www/db/anemometer/conf"
+                                    + "htdocs/db/anemometer/conf"
                                     "/config.inc.php "
                                     "| head -1 | cut -d\\\' -f4 | "
                                     "tr -d '\n'").read()

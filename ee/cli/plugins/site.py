@@ -1638,8 +1638,8 @@ class EESiteUpdateController(CementBaseController):
                     #search for wp-config.php
                     if EEFileUtils.isexist(self,"{0}/wp-config.php".format(ee_site_webroot)):
                         config_path = '{0}/wp-config.php'.format(ee_site_webroot)
-                    elif EEFileUtils.isexist(self,"{0}/htdocs/www/wp-config.php".format(ee_site_webroot)):
-                        config_path = '{0}/htdocs/www/wp-config.php'.format(ee_site_webroot)
+                    elif EEFileUtils.isexist(self,"{0}/htdocs/wp-config.php".format(ee_site_webroot)):
+                        config_path = '{0}/htdocs/wp-config.php'.format(ee_site_webroot)
                     else:
                         Log.debug(self, "Updating wp-config.php failed. File could not be located.")
                         Log.error(self,"wp-config.php could not be located !!")
