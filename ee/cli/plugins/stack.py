@@ -180,7 +180,7 @@ class EEStackController(CementBaseController):
             EERepo.add_key(self, EEVariables.ee_nginx_key)
 
         if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
-            if set(EEVariables.ee_php7_0).issubset(set(apt_packages)) \
+            if set(EEVariables.ee_php7.2).issubset(set(apt_packages)) \
                     or set(EEVariables.ee_php5_6).issubset(set(apt_packages)):
                 Log.info(self, "Adding repository for PHP, please wait...")
                 Log.debug(self, 'Adding ppa for PHP')
@@ -200,7 +200,7 @@ class EEStackController(CementBaseController):
                     EERepo.add(self, ppa=EEVariables.ee_php_repo)
 
             if EEVariables.ee_platform_codename == 'jessie':
-                if set(EEVariables.ee_php7_0).issubset(set(apt_packages)):
+                if set(EEVariables.ee_php7.2).issubset(set(apt_packages)):
                     Log.debug(self, 'Adding repo_url of php 7.2 for debian')
                     EERepo.add(self, repo_url=EEVariables.ee_php_repo)
                     Log.debug(self, 'Adding Dotdeb/php GPG key')
@@ -1134,7 +1134,7 @@ class EEStackController(CementBaseController):
                 EEService.restart_service(self, 'php5.6-fpm')
 
         #PHP7.2 configuration for debian
-            if (EEVariables.ee_platform_codename == 'jessie' ) and set(EEVariables.ee_php7_0).issubset(set(apt_packages)):
+            if (EEVariables.ee_platform_codename == 'jessie' ) and set(EEVariables.ee_php7.2).issubset(set(apt_packages)):
                  # Create log directories
                 if not os.path.exists('/var/log/php/7.2/'):
                     Log.debug(self, 'Creating directory /var/log/php/7.2/')
@@ -1256,7 +1256,7 @@ class EEStackController(CementBaseController):
                 EEService.restart_service(self, 'php7.2-fpm')
 
             #preconfiguration for php7.2
-            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial') and set(EEVariables.ee_php7_0).issubset(set(apt_packages)):
+            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial') and set(EEVariables.ee_php7.2).issubset(set(apt_packages)):
                 # Create log directories
                 if not os.path.exists('/var/log/php/7.2/'):
                     Log.debug(self, 'Creating directory /var/log/php/7.2/')
@@ -2276,7 +2276,7 @@ class EEStackController(CementBaseController):
                 if (EEVariables.ee_platform_codename == 'jessie'):
                     Log.debug(self, "Setting apt_packages variable for PHP 7.2")
                     if not EEAptGet.is_installed(self, 'php7.2-fpm') :
-                        apt_packages = apt_packages + EEVariables.ee_php7_0
+                        apt_packages = apt_packages + EEVariables.ee_php7.2
                         if not EEAptGet.is_installed(self, 'php5-fpm'):
                             apt_packages = apt_packages + EEVariables.ee_php
                     else:
@@ -2291,7 +2291,7 @@ class EEStackController(CementBaseController):
                 if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
                     Log.debug(self, "Setting apt_packages variable for PHP 7.2")
                     if not EEAptGet.is_installed(self, 'php7.2-fpm') :
-                        apt_packages = apt_packages + EEVariables.ee_php7_0 + EEVariables.ee_php_extra
+                        apt_packages = apt_packages + EEVariables.ee_php7.2 + EEVariables.ee_php_extra
                         if not EEAptGet.is_installed(self, 'php5.6-fpm'):
                             apt_packages = apt_packages + EEVariables.ee_php5_6 + EEVariables.ee_php_extra
                     else:
@@ -2551,7 +2551,7 @@ class EEStackController(CementBaseController):
         if self.app.pargs.php7:
             if (EEVariables.ee_platform_codename == 'jessie'):
                 Log.debug(self, "Removing apt_packages variable of PHP 7.2")
-                apt_packages = apt_packages + EEVariables.ee_php7_0
+                apt_packages = apt_packages + EEVariables.ee_php7.2
                 if not EEAptGet.is_installed(self, 'php5-fpm'):
                     apt_packages = apt_packages + EEVariables.ee_php_extra
             else:
@@ -2560,7 +2560,7 @@ class EEStackController(CementBaseController):
         if self.app.pargs.php7:
             if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
                 Log.debug(self, "Removing apt_packages variable of PHP 7.2")
-                apt_packages = apt_packages + EEVariables.ee_php7_0
+                apt_packages = apt_packages + EEVariables.ee_php7.2
                 if not EEAptGet.is_installed(self, 'php5.6-fpm'):
                     apt_packages = apt_packages + EEVariables.ee_php_extra
             else:
@@ -2723,7 +2723,7 @@ class EEStackController(CementBaseController):
         if self.app.pargs.php7:
             if (EEVariables.ee_platform_codename == 'jessie'):
                 Log.debug(self, "Removing apt_packages variable of PHP 7.2")
-                apt_packages = apt_packages + EEVariables.ee_php7_0
+                apt_packages = apt_packages + EEVariables.ee_php7.2
                 if not EEAptGet.is_installed(self, 'php5-fpm'):
                     apt_packages = apt_packages + EEVariables.ee_php_extra
             else:
@@ -2732,7 +2732,7 @@ class EEStackController(CementBaseController):
         if self.app.pargs.php7:
             if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
                 Log.debug(self, "Removing apt_packages variable of PHP 7.2")
-                apt_packages = apt_packages + EEVariables.ee_php7_0
+                apt_packages = apt_packages + EEVariables.ee_php7.2
                 if not EEAptGet.is_installed(self, 'php5.6-fpm'):
                     apt_packages = apt_packages + EEVariables.ee_php_extra
             else:

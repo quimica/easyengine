@@ -119,10 +119,10 @@ class EEVariables():
                         "php5.6-mcrypt", "php5.6-readline", "php5.6-common", "php5.6-recode",
                         "php5.6-mysql", "php5.6-cli", "php5.6-curl", "php5.6-mbstring",
                          "php5.6-bcmath", "php5.6-mysql", "php5.6-opcache", "php5.6-zip", "php5.6-xml", "php5.6-soap"]
-            ee_php7_0 = ["php7.0-fpm", "php7.0-curl", "php7.0-gd", "php7.0-imap",
-                          "php7.0-mcrypt", "php7.0-readline", "php7.0-common", "php7.0-recode",
-                          "php7.0-cli", "php7.0-mbstring",
-                         "php7.0-bcmath", "php7.0-mysql", "php7.0-opcache", "php7.0-zip", "php7.0-xml", "php7.0-soap"]
+            ee_php7.2 = ["php7.2-fpm", "php7.2-curl", "php7.2-gd", "php7.2-imap",
+                          "php7.2-mcrypt", "php7.2-readline", "php7.2-common", "php7.2-recode",
+                          "php7.2-cli", "php7.2-mbstring",
+                         "php7.2-bcmath", "php7.2-mysql", "php7.2-opcache", "php7.2-zip", "php7.2-xml", "php7.2-soap"]
             ee_php_extra = ["php-memcached", "php-imagick", "php-memcache", "memcached",
                             "graphviz", "php-pear", "php-xdebug", "php-msgpack", "php-redis"]
     elif ee_platform_distro == 'debian':
@@ -137,12 +137,12 @@ class EEVariables():
                   "php5-mysqlnd", "php5-cli", "php5-memcache", "php5-imagick",
                  "memcached", "graphviz", "php-pear"]
 
-        ee_php7_0 = ["php7.0-fpm", "php7.0-curl", "php7.0-gd", "php7.0-imap",
-                  "php7.0-mcrypt", "php7.0-common", "php7.0-readline", "php7.0-redis",
-                  "php7.0-mysql", "php7.0-cli", "php7.0-memcache", "php7.0-imagick",
-                  "php7.0-mbstring", "php7.0-recode", "php7.0-bcmath", "php7.0-opcache", "php7.0-zip", "php7.0-xml",
-                     "php7.0-soap", "php7.0-msgpack",
-                 "memcached", "graphviz", "php-pear", "php7.0-xdebug"]
+        ee_php7.2 = ["php7.2-fpm", "php7.2-curl", "php7.2-gd", "php7.2-imap",
+                  "php7.2-mcrypt", "php7.2-common", "php7.2-readline", "php7.2-redis",
+                  "php7.2-mysql", "php7.2-cli", "php7.2-memcache", "php7.2-imagick",
+                  "php7.2-mbstring", "php7.2-recode", "php7.2-bcmath", "php7.2-opcache", "php7.2-zip", "php7.2-xml",
+                     "php7.2-soap", "php7.2-msgpack",
+                 "memcached", "graphviz", "php-pear", "php7.2-xdebug"]
         ee_php_extra = []
 
     if ee_platform_codename == 'wheezy':

@@ -482,9 +482,9 @@ class EESiteCreateController(CementBaseController):
 
         if data and self.app.pargs.php7:
             if (not self.app.pargs.experimental):
-                Log.info(self, "PHP7.2 is experimental feature and it may not "
-                         "work with all CSS/JS/Cache of your site.\nDo you wish"
-                         " to install PHP 7.2 now for {0}?".format(ee_domain))
+                Log.info(self, "PHP7.2 may not work with all plugins of your site."
+                         "\nYou can disable it by passing --php7=off later."
+                         "\nDo you wish to enable PHP now for {0}?".format(ee_domain))
 
                 # Check prompt
                 check_prompt = input("Type \"y\" to continue [n]:")
@@ -542,7 +542,7 @@ class EESiteCreateController(CementBaseController):
         if data and self.app.pargs.pagespeed:
             if (not self.app.pargs.experimental):
                 Log.info(self, "PageSpeed is experimental feature and it may not "
-                         "work with all CSS/JS/Cache of your site.\nYou can "
+                         "work with all plugins of your site.\nYou can "
                          "disable it by passing --pagespeed=off later.\nDo you wish"
                          " to enable PageSpeed now for {0}?".format(ee_domain))
 
@@ -565,7 +565,7 @@ class EESiteCreateController(CementBaseController):
 
         if (cache == 'wpredis' and (not self.app.pargs.experimental)):
             Log.info(self, "Redis is experimental feature and it may not "
-                     "work with all CSS/JS/Cache of your site.\nYou can "
+                     "work with all plugins of your site.\nYou can "
                      "disable it by changing cache later.\nDo you wish"
                      " to enable Redis now for {0}?".format(ee_domain))
 
