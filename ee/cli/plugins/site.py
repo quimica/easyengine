@@ -851,7 +851,7 @@ class EESiteUpdateController(CementBaseController):
                 dict(help='Use PageSpeed for site',
                      action='store' or 'store_const',
                      choices=('on', 'off'), const='on', nargs='?')),
-            (['-le','--letsencrypt'],
+            (['--ssl'],
                 dict(help="configure letsencrypt ssl for the site",
                      action='store' or 'store_const',
                      choices=('on', 'off', 'renew'), const='on', nargs='?')),

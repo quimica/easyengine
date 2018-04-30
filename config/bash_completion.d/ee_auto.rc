@@ -217,9 +217,9 @@ _ee_complete()
         "--wp")
             if [ ${COMP_WORDS[1]} != "debug" ]; then
                 if [ ${COMP_WORDS[2]} == "create" ]; then
-                    retlist="--wp --wpsc --w3tc --wpfc --hhvm --user --email --pass --wpredis --letsencrypt --php7"
+                    retlist="--wp --wpsc --w3tc --wpfc --hhvm --user --email --pass --wpredis --ssl --php7"
                 elif [ ${COMP_WORDS[2]} == "update" ]; then
-                    retlist="--wp --w3tc --wpfc --wpsc --php7 --php7=off --hhvm --hhvm=off --wpredis --letsencrypt --letsencrypt=off --letsencrypt=renew"
+                    retlist="--wp --w3tc --wpfc --wpsc --php7 --php7=off --hhvm --hhvm=off --wpredis --ssl --ssl=off"
                 else
                     retlist=""
                 fi
@@ -236,9 +236,9 @@ _ee_complete()
         "--wpsubdir" | "--wpsubdomain")
             if [ ${COMP_WORDS[1]} != "debug" ]; then
                 if [ ${COMP_WORDS[2]} == "create" ]; then
-                    retlist="--wpsc --w3tc --wpfc --hhvm --user --email --pass --wpredis --letsencrypt --php7"
+                    retlist="--wpsc --w3tc --wpfc --hhvm --user --email --pass --wpredis --ssl --php7"
                 elif [ ${COMP_WORDS[2]} == "update" ]; then
-                    retlist="--w3tc --wpfc --wpsc --php7 --php7=off --hhvm --hhvm=off --wpredis --letsencrypt --letsencrypt=off --letsencrypt=renew"
+                    retlist="--w3tc --wpfc --wpsc --php7 --php7=off --hhvm --hhvm=off --wpredis --ssl --ssl=off"
                 else
                     retlist=""
                 fi
@@ -254,7 +254,7 @@ _ee_complete()
 
         "--hhvm" | "--wpredis" | "--w3tc" | "--wpfc" | "--wpsc" | "--wpsubdir" | "--wpsubdomain" | "--user" | "--pass" | "--email" | "--wp")
             if [ ${COMP_WORDS[2]} == "create" ]; then
-                retlist="--user --pass --email --wp  --wpsubdir --wpsubdomain --w3tc --wpfc --wpsc --hhvm --experimenal  --wpredis --php7 --letsencrypt "
+                retlist="--user --pass --email --wp  --wpsubdir --wpsubdomain --w3tc --wpfc --wpsc --hhvm --experimenal  --wpredis --php7 --ssl "
             else
                 retlist=""
             fi
@@ -267,7 +267,7 @@ _ee_complete()
 
         "--hhvm" | "--wpredis" | "--w3tc" | "--wpfc")
             if [ ${COMP_WORDS[2]} == "update" ]; then
-                retlist="--password --php --php7 --mysql --wp  --wpsubdir --wpsubdomain --w3tc --wpfc --wpsc --hhvm --hhvm=off --experimenal --wpredis --letsencrypt --letsencrypt=off --letsencrypt=renew"
+                retlist="--password --php --php7 --mysql --wp  --wpsubdir --wpsubdomain --w3tc --wpfc --wpsc --hhvm --hhvm=off --experimenal --wpredis --ssl --ssl=off"
             else
                 retlist=""
             fi
@@ -320,7 +320,7 @@ _ee_complete()
           elif [ ${COMP_WORDS[2]} == "delete" ]; then
               retlist="--db --files --force"
           elif [ ${COMP_WORDS[2]} == "update" ]; then
-            retlist="--password --php --mysql --wp  --wpsubdir --wpsubdomain --w3tc --wpfc --wpsc --hhvm --hhvm=off --wpredis --letsencrypt --letsencrypt=off --letsencrypt=renew"
+            retlist="--password --php --mysql --wp  --wpsubdir --wpsubdomain --w3tc --wpfc --wpsc --hhvm --hhvm=off --wpredis --ssl --ssl=off"
           else
             retlist=""
           fi
@@ -369,7 +369,7 @@ _ee_complete()
         case "$mprev" in
             "--user" | "--email" | "--pass")
                 if [ ${COMP_WORDS[2]} == "create" ]; then
-                    retlist="--user --pass --email --html --php --php7 --mysql --wp  --wpsubdir --wpsubdomain --w3tc --wpfc --wpsc --hhvm --wpredis --letsencrypt"
+                    retlist="--user --pass --email --html --php --php7 --mysql --wp  --wpsubdir --wpsubdomain --w3tc --wpfc --wpsc --hhvm --wpredis --ssl"
                 fi
                 ret="${retlist[@]/$prev}"
                 COMPREPLY=( $(compgen \
