@@ -158,8 +158,8 @@ class EESiteController(CementBaseController):
 
             php_version = siteinfo.php_version
             pagespeed = ("enabled" if siteinfo.is_pagespeed else "disabled")
-            letsencrypt = ("enabled" if siteinfo.is_ssl else "disabled")
-            if (letsencrypt == "enabled"):
+            ssl = ("enabled" if siteinfo.is_ssl else "disabled")
+            if (ssl == "enabled"):
                 sslprovider = ''
                 sslexpiry = ''
             data = dict(domain=ee_domain, webroot=ee_site_webroot,
@@ -382,7 +382,7 @@ class EESiteCreateController(CementBaseController):
 
     @expose(hide=True)
     def default(self):
-        self.app.render((data), 'default.mustache')
+        # self.app.render((data), 'default.mustache')
         # Check domain name validation
         data = dict()
         host, port = None, None
