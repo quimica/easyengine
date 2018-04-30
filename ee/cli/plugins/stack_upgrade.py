@@ -160,14 +160,14 @@ class EEStackUpgradeController(CementBaseController):
                     else:
                         Log.info(self, "PHP is not installed")
                     if EEAptGet.is_installed(self, 'php7.2-fpm'):
-                        apt_packages = apt_packages + EEVariables.ee_php7.2
+                        apt_packages = apt_packages + EEVariables.ee_php7_2
                 else:
                     if EEAptGet.is_installed(self, 'php5.6-fpm'):
                         apt_packages = apt_packages + EEVariables.ee_php5_6 + EEVariables.ee_php_extra
                     else:
                         Log.info(self, "PHP 5.6 is not installed")
                     if EEAptGet.is_installed(self, 'php7.2-fpm'):
-                        apt_packages = apt_packages + EEVariables.ee_php7.2 + EEVariables.ee_php_extra
+                        apt_packages = apt_packages + EEVariables.ee_php7_2 + EEVariables.ee_php_extra
                     else:
                         Log.info(self, "PHP 7.2 is not installed")
 
@@ -238,7 +238,7 @@ class EEStackUpgradeController(CementBaseController):
                     else:
                         if set(EEVariables.ee_php5_6).issubset(set(apt_packages)):
                             EEService.restart_service(self, 'php5.6-fpm')
-                        if set(EEVariables.ee_php7.2).issubset(set(apt_packages)):
+                        if set(EEVariables.ee_php7_2).issubset(set(apt_packages)):
                             EEService.restart_service(self, 'php7.2-fpm')
                     if set(EEVariables.ee_hhvm).issubset(set(apt_packages)):
                         EEService.restart_service(self, 'hhvm')
