@@ -1401,10 +1401,8 @@ class EESiteUpdateController(CementBaseController):
 
         if pargs.letsencrypt:
             if data['letsencrypt'] is True:
-                if not os.path.isfile("{0}/conf/nginx/ssl.conf.disabled"
+                if os.path.isfile("{0}/conf/nginx/ssl.conf.disabled"
                               .format(ee_site_webroot)):
-
-                else:
                     EEFileUtils.mvfile(self, "{0}/conf/nginx/ssl.conf.disabled"
                                .format(ee_site_webroot),
                                '{0}/conf/nginx/ssl.conf'
