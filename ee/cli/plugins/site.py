@@ -382,12 +382,7 @@ class EESiteCreateController(CementBaseController):
 
     @expose(hide=True)
     def default(self):
-        #Remove Pagespeed Support Since EE 3.6.0
-        #if self.app.pargs.pagespeed:
-        #    Log.error(self, "Pagespeed support has been dropped since EasyEngine v3.6.0",False)
-        #    Log.error(self, "Please run command again without `--pagespeed`",False)
-        #    Log.error(self, "For more details, read - https://easyengine.io/blog/disabling-pagespeed/")
-        # self.app.render((data), 'default.mustache')
+        self.app.render((data), 'default.mustache')
         # Check domain name validation
         data = dict()
         host, port = None, None
@@ -867,11 +862,6 @@ class EESiteUpdateController(CementBaseController):
     @expose(help="Update site type or cache")
     def default(self):
         pargs = self.app.pargs
-
-#        if self.app.pargs.pagespeed:
-#            Log.error(self, "Pagespeed support has been dropped since EasyEngine v3.6.0",False)
-#            Log.error(self, "Please run command again without `--pagespeed`",False)
-#            Log.error(self, "For more details, read - https://easyengine.io/blog/disabling-pagespeed/")
 
         if pargs.all:
             if pargs.site_name:

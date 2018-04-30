@@ -91,11 +91,6 @@ class EEStackController(CementBaseController):
     def default(self):
         """default action of ee stack command"""
 
-        #if self.app.pargs.pagespeed:
-        #    Log.error(self, "Pagespeed support has been dropped since EasyEngine v3.6.0",False)
-        #    Log.error(self, "Please run command again without `--pagespeed`",False)
-        #    Log.error(self, "For more details, read - https://easyengine.io/blog/disabling-pagespeed/")
-        #else:
         self.app.args.print_help()
 
     @expose(hide=True)
@@ -2153,10 +2148,6 @@ class EEStackController(CementBaseController):
     @expose(help="Install packages")
     def install(self, packages=[], apt_packages=[], disp_msg=True):
         """Start installation of packages"""
-        #if self.app.pargs.pagespeed:
-        #    Log.error(self, "Pagespeed support has been dropped since EasyEngine v3.6.0",False)
-        #    Log.error(self, "Please run command again without `--pagespeed`",False)
-        #    Log.error(self, "For more details, read - https://easyengine.io/blog/disabling-pagespeed/")
         self.msg = []
         try:
             # Default action for stack installation
@@ -2490,12 +2481,6 @@ class EEStackController(CementBaseController):
         apt_packages = []
         packages = []
 
-        #if self.app.pargs.pagespeed:
-        #    Log.error(self, "Pagespeed support has been dropped since EasyEngine v3.6.0",False)
-        #    Log.error(self, "Please run command again without `--pagespeed`",False)
-        #    Log.error(self, "For more details, read - https://easyengine.io/blog/disabling-pagespeed/")
-
-
         # Default action for stack remove
         if ((not self.app.pargs.web) and (not self.app.pargs.admin) and
            (not self.app.pargs.mail) and (not self.app.pargs.nginx) and
@@ -2668,11 +2653,6 @@ class EEStackController(CementBaseController):
         apt_packages = []
         packages = []
 
-        #if self.app.pargs.pagespeed:
-        #    Log.error(self, "Pagespeed support has been dropped since EasyEngine v3.6.0",False)
-        #    Log.error(self, "Please run command again without `--pagespeed`",False)
-        #    Log.error(self, "For more details, read - https://easyengine.io/blog/disabling-pagespeed/")
-
         # Default action for stack purge
         if ((not self.app.pargs.web) and (not self.app.pargs.admin) and
            (not self.app.pargs.mail) and (not self.app.pargs.nginx) and
@@ -2721,7 +2701,7 @@ class EEStackController(CementBaseController):
             apt_packages = (apt_packages + EEVariables.ee_mailscanner)
 
         if self.app.pargs.pagespeed:
-            Log.debug(self, "Purge packages varible of Pagespeed")
+            Log.debug(self, "Purge packages variable of Pagespeed")
             packages = packages + ['/etc/nginx/conf.d/pagespeed.conf']
 
         if self.app.pargs.nginx:
