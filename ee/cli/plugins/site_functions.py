@@ -938,23 +938,6 @@ def site_package_check(self, stype):
                     php_file.write("upstream php7 {\nserver 127.0.0.1:9070;\n}\n"
                                     "upstream debug7 {\nserver 127.0.0.1:9170;\n}\n")
 
-
-    # Check if Nginx is allready installed and Pagespeed config there or not
-    # If not then copy pagespeed config
-    if self.app.pargs.pagespeed:
-        if (os.path.isfile('/etc/nginx/nginx.conf') and
-           (not os.path.isfile('/etc/nginx/conf.d/pagespeed.conf'))):
-            # Pagespeed configuration
-            data = dict()
-            Log.debug(self, 'Writting the Pagespeed Global '
-                      'configuration to file /etc/nginx/conf.d/'
-                      'pagespeed.conf')
-            ee_nginx = open('/etc/nginx/conf.d/pagespeed.conf',
-                            encoding='utf-8', mode='w')
-            self.app.render((data), 'pagespeed-global.mustache',
-                            out=ee_nginx)
-            ee_nginx.close()
-
     return(stack.install(apt_packages=apt_packages, packages=packages,
                          disp_msg=False))
 

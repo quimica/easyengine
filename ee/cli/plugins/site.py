@@ -157,7 +157,6 @@ class EESiteController(CementBaseController):
                 ee_site_webroot = ''
 
             php_version = siteinfo.php_version
-            pagespeed = ("enabled" if siteinfo.is_pagespeed else "disabled")
             ssl = ("enabled" if siteinfo.is_ssl else "disabled")
             data = dict(domain=ee_domain, webroot=ee_site_webroot,
                         accesslog=access_log, errorlog=error_log,
@@ -248,9 +247,6 @@ class EESiteEditController(CementBaseController):
             (['site_name'],
                 dict(help='domain name for the site',
                      nargs='?')),
-            (['--pagespeed'],
-                dict(help="edit pagespeed configuration for site",
-                     action='store_true')),
             ]
 
     @expose(hide=True)
@@ -271,49 +267,24 @@ class EESiteEditController(CementBaseController):
 
         ee_site_webroot = EEVariables.ee_webroot + ee_domain
 
-        if not self.app.pargs.pagespeed:
-            if os.path.isfile('/etc/nginx/sites-available/{0}'
-                              .format(ee_domain)):
-                try:
-                    EEShellExec.invoke_editor(self, '/etc/nginx/sites-availa'
-                                              'ble/{0}'.format(ee_domain))
-                except CommandExecutionError as e:
-                    Log.error(self, "Failed invoke editor")
-                if (EEGit.checkfilestatus(self, "/etc/nginx",
-                   '/etc/nginx/sites-available/{0}'.format(ee_domain))):
-                    EEGit.add(self, ["/etc/nginx"], msg="Edit website: {0}"
-                              .format(ee_domain))
-                    # Reload NGINX
-                    if not EEService.reload_service(self, 'nginx'):
-                        Log.error(self, "service nginx reload failed. "
-                                  "check issues with `nginx -t` command")
-            else:
-                Log.error(self, "nginx configuration file does not exists"
+        if os.path.isfile('/etc/nginx/sites-available/{0}'
+                          .format(ee_domain)):
+            try:
+                EEShellExec.invoke_editor(self, '/etc/nginx/sites-availa'
+                                          'ble/{0}'.format(ee_domain))
+            except CommandExecutionError as e:
+                Log.error(self, "Failed invoke editor")
+            if (EEGit.checkfilestatus(self, "/etc/nginx",
+               '/etc/nginx/sites-available/{0}'.format(ee_domain))):
+                EEGit.add(self, ["/etc/nginx"], msg="Edit website: {0}"
                           .format(ee_domain))
-
-        elif self.app.pargs.pagespeed:
-            if os.path.isfile('{0}/conf/nginx/pagespeed.conf'
-                              .format(ee_site_webroot)):
-                try:
-                    EEShellExec.invoke_editor(self, '{0}/conf/nginx/'
-                                              'pagespeed.conf'
-                                              .format(ee_site_webroot))
-                except CommandExecutionError as e:
-                    Log.error(self, "Failed invoke editor")
-                if (EEGit.checkfilestatus(self, "{0}/conf/nginx"
-                   .format(ee_site_webroot),
-                   '{0}/conf/nginx/pagespeed.conf'.format(ee_site_webroot))):
-                    EEGit.add(self, ["{0}/conf/nginx".format(ee_site_webroot)],
-                              msg="Edit Pagespped config of site: {0}"
-                              .format(ee_domain))
-                    # Reload NGINX
-                    if not EEService.reload_service(self, 'nginx'):
-                        Log.error(self, "service nginx reload failed. "
-                                  "check issues with `nginx -t` command")
-            else:
-                Log.error(self, "Pagespeed configuration file does not exists"
-                          .format(ee_domain))
-
+                # Reload NGINX
+                if not EEService.reload_service(self, 'nginx'):
+                    Log.error(self, "service nginx reload failed. "
+                              "check issues with `nginx -t` command")
+        else:
+            Log.error(self, "nginx configuration file does not exists"
+                      .format(ee_domain))
 
 class EESiteCreateController(CementBaseController):
     class Meta:
@@ -357,8 +328,6 @@ class EESiteCreateController(CementBaseController):
                      action='store_true')),
             (['--hhvm'],
                 dict(help="create HHVM site", action='store_true')),
-            (['--pagespeed'],
-                dict(help="create pagespeed site", action='store_true')),
             (['--ssl'],
                 dict(help="configure letsencrypt ssl for the site", action='store_true')),
             (['--user'],
@@ -539,30 +508,6 @@ class EESiteCreateController(CementBaseController):
             data['hhvm'] = False
             hhvm = 0
 
-        if data and self.app.pargs.pagespeed:
-            if (not self.app.pargs.experimental):
-                Log.info(self, "PageSpeed is experimental feature and it may not "
-                         "work with all plugins of your site.\nYou can "
-                         "disable it by passing --pagespeed=off later.\nDo you wish"
-                         " to enable PageSpeed now for {0}?".format(ee_domain))
-
-                # Check prompt
-                check_prompt = input("Type \"y\" to continue [n]:")
-                if check_prompt != "Y" and check_prompt != "y":
-                    Log.info(self, "Not using PageSpeed for site.")
-                    data['pagespeed'] = False
-                    pagespeed = 0
-                    self.app.pargs.pagespeed = False
-                else:
-                    data['pagespeed'] = True
-                    pagespeed = 1
-            else:
-                data['pagespeed'] = True
-                pagespeed = 1
-        elif data:
-            data['pagespeed'] = False
-            pagespeed = 0
-
         if (cache == 'wpredis' and (not self.app.pargs.experimental)):
             Log.info(self, "Redis is experimental feature and it may not "
                      "work with all plugins of your site.\nYou can "
@@ -622,9 +567,6 @@ class EESiteCreateController(CementBaseController):
                 Log.info(self, "Successfully created site"
                          " http://{0}".format(ee_domain))
                 return
-            # Update pagespeed config
-            if self.app.pargs.pagespeed:
-                operateOnPagespeed(self, data)
 
             if data['php7']:
                 php_version = "7.2"
@@ -838,10 +780,6 @@ class EESiteUpdateController(CementBaseController):
                 dict(help='Use HHVM for site',
                      action='store' or 'store_const',
                      choices=('on', 'off'), const='on', nargs='?')),
-            (['--pagespeed'],
-                dict(help='Use PageSpeed for site',
-                     action='store' or 'store_const',
-                     choices=('on', 'off'), const='on', nargs='?')),
             (['--ssl'],
                 dict(help="configure letsencrypt ssl for the site",
                      action='store' or 'store_const',
@@ -893,7 +831,6 @@ class EESiteUpdateController(CementBaseController):
 
     def doupdatesite(self, pargs):
         hhvm = None
-        pagespeed = None
         letsencrypt = False
         php7 = None
 
@@ -941,7 +878,6 @@ class EESiteUpdateController(CementBaseController):
             oldsitetype = check_site.site_type
             oldcachetype = check_site.cache_type
             old_hhvm = check_site.is_hhvm
-            old_pagespeed = check_site.is_pagespeed
             check_ssl = check_site.is_ssl
             check_php_version = check_site.php_version
 
@@ -991,7 +927,6 @@ class EESiteUpdateController(CementBaseController):
             data['proxy'] = True
             data['host'] = host
             data['port'] = port
-            pagespeed = False
             hhvm = False
             data['webroot'] = ee_site_webroot
             data['currsitetype'] = oldsitetype
@@ -1095,13 +1030,6 @@ class EESiteUpdateController(CementBaseController):
                 data['hhvm'] = False
                 hhvm = False
 
-            if pargs.pagespeed != 'off':
-                data['pagespeed'] = True
-                pagespeed = True
-            elif pargs.pagespeed == 'off':
-                data['pagespeed'] = False
-                pagespeed = False
-
             if pargs.php7 == 'on' :
                 data['php7'] = True
                 php7 = True
@@ -1110,16 +1038,6 @@ class EESiteUpdateController(CementBaseController):
                 data['php7'] = False
                 php7 = False
                 check_php_version = '5.6'
-
-        if pargs.pagespeed:
-            if pagespeed is old_pagespeed:
-                if pagespeed is False:
-                    Log.info(self, "Pagespeed is already disabled for given "
-                             "site")
-                elif pagespeed is True:
-                    Log.info(self, "Pagespeed is already enabled for given "
-                             "site")
-                pargs.pagespeed = False
 
         if pargs.php7:
             if php7 is old_php7:
@@ -1228,14 +1146,6 @@ class EESiteUpdateController(CementBaseController):
                 data['hhvm'] = False
                 hhvm = False
 
-        if data and (not pargs.pagespeed):
-            if old_pagespeed is True:
-                data['pagespeed'] = True
-                pagespeed = True
-            else:
-                data['pagespeed'] = False
-                pagespeed = False
-
         if data and (not pargs.php7):
             if old_php7 is True:
                 data['php7'] = True
@@ -1333,7 +1243,6 @@ class EESiteUpdateController(CementBaseController):
         data['ee_db_user'] = check_site.db_user
         data['ee_db_pass'] = check_site.db_password
         data['ee_db_host'] = check_site.db_host
-        data['old_pagespeed_status'] = check_site.is_pagespeed
 
         if not pargs.ssl:
             try:
@@ -1366,10 +1275,6 @@ class EESiteUpdateController(CementBaseController):
             Log.info(self, "Successfully updated site"
                      " http://{0}".format(ee_domain))
             return 0
-
-        # Update pagespeed config
-        if pargs.pagespeed:
-            operateOnPagespeed(self, data)
 
         if pargs.ssl:
             if data['letsencrypt'] is True:
