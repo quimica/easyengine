@@ -159,7 +159,7 @@ class EESiteController(CementBaseController):
             php_version = siteinfo.php_version
             pagespeed = ("enabled" if siteinfo.is_pagespeed else "disabled")
             letsencrypt = ("enabled" if siteinfo.is_ssl else "disabled")
-            if (ssl == "enabled"):
+            if (letsencrypt == "enabled"):
                 sslprovider = ''
                 sslexpiry = ''
             data = dict(domain=ee_domain, webroot=ee_site_webroot,
