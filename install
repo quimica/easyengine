@@ -48,7 +48,7 @@ fi
 # Define variables for later use
 ee_branch=$1
 readonly ee_version_old="2.2.3"
-readonly ee_version_new="3.7.6"
+readonly ee_version_new="3.7.5"
 readonly ee_log_dir=/var/log/ee/
 readonly ee_install_log=/var/log/ee/install.log
 readonly ee_linux_distro=$(lsb_release -i | awk '{print $3}')
@@ -759,9 +759,7 @@ elif [ ! -f /usr/local/bin/ee ]; then
     ee_git_init | tee -ai $ee_install_log
 
 else
-    #ee -v 2>&1 | grep $ee_version_new &>> /dev/null
-    #if [[ $? -ne 0 ]];then
-        read -p "Update EasyEngine to $ee_version_new (y/n): " ee_ans
+        read -p "Update EasyEngine (y/n): " ee_ans
         if [ "$ee_ans" = "y" ] || [ "$ee_ans" = "Y" ]; then
             ee_install_dep | tee -ai $ee_install_log
             ee_sync_db 2&>>1 $EE_INSTALL_LOG
@@ -778,11 +776,8 @@ else
             fi
             ee_update_wp_cli | tee -ai $ee_install_log
         else
-            ee_lib_error "Not updating EasyEngine to $ee_version_new, exit status = " 1
+            ee_lib_error "Not updating EasyEngine, exit status = " 1
         fi
-    #else
-    #    ee_lib_error "You already have EasyEngine $ee_version_new, exit status = " 1
-    #fi
 fi
 ee sync | tee -ai $EE_INSTALL_LOG
 
@@ -792,4 +787,3 @@ echo
 ee_lib_echo_info "source /etc/bash_completion.d/ee_auto.rc"
 echo
 ee_lib_echo "EasyEngine (ee) installed/updated successfully"
-ee_lib_echo "EasyEngine (ee) help: http://docs.rtcamp.com/easyengine/"

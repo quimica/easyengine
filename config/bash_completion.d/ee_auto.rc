@@ -165,13 +165,13 @@ _ee_complete()
 
             "create")
                 COMPREPLY=( $(compgen \
-                                    -W "--user --pass --email --html --php --php7 --mysql --wp  --wpsubdir --wpsubdomain --w3tc --wpfc --wpsc --hhvm --proxy= --wpredis --letsencrypt -le" \
+                                    -W "--user --pass --email --html --php --php7 --mysql --wp  --wpsubdir --wpsubdomain --w3tc --wpfc --wpsc --hhvm --proxy= --wpredis --ssl" \
                                  -- $cur) )
                 ;;
 
             "update")
                 COMPREPLY=( $(compgen \
-                                    -W "--password --php --php7 --mysql --wp  --wpsubdir --wpsubdomain --w3tc --wpfc --wpsc --hhvm --hhvm=off  --wpredis --letsencrypt --letsencrypt=off --letsencrypt=renew" \
+                                    -W "--password --php --php7 --mysql --wp  --wpsubdir --wpsubdomain --w3tc --wpfc --wpsc --hhvm --hhvm=off  --wpredis --ssl --ssl=off" \
                                  -- $cur) )
                 ;;
             "delete")

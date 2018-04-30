@@ -1436,20 +1436,27 @@ def httpsRedirect(self,ee_domain_name,redirect=True):
                                      "\tlisten 80;\n" +
                                      "\tserver_name www.{0} {0};\n".format(ee_domain_name) +
                                      "\treturn 301 https://{0}".format(ee_domain_name)+"$request_uri;\n}" )
+                sslconf.close()
 
+                Log.info(self, "Adding /srv/{0}/conf/nginx/ssl.conf".format(ee_domain_name))
+
+                sslconf = open("/srv/{0}/conf/nginx/ssl.conf"
+                                          .format(ee_domain_name),
+                                          encoding='utf-8', mode='w')
                 sslconf.write("listen 443 ssl http2;\n"
                                          "ssl on;\n"
-                                         "ssl_certificate     /etc/ssl/live/{0}/fullchain.pem;\n"
-                                         "ssl_certificate_key     /etc/ssl/live/{0}/privkey.pem;\n"
+                                         "ssl_certificate     /etc/letsencrypt/live/{0}/fullchain.pem;\n"
+                                         "ssl_certificate_key     /etc/letsencrypt/live/{0}/privkey.pem;\n"
                                          .format(ee_domain_name))
                 sslconf.close()
+
                 updateSiteInfo(self, ee_domain_name, ssl=True)
 
                 # Nginx Configation into GIT
             except IOError as e:
                 Log.debug(self, str(e))
                 Log.debug(self, "Error occured while generating "
-                              "/etc/nginx/conf.d/force-ssl-{0}.conf".format(ee_domain_name))
+                              "ssl.conf or force-ssl-{0}.conf".format(ee_domain_name))            
 
         Log.info(self, "Added HTTPS Force Redirection for Site "
                          " http://{0}".format(ee_domain_name))

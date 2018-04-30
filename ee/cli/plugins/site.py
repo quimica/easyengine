@@ -157,12 +157,9 @@ class EESiteController(CementBaseController):
                 ee_site_webroot = ''
 
             php_version = siteinfo.php_version
-#            pagespeed = ("enabled" if siteinfo.is_pagespeed else "disabled")
+            pagespeed = ("enabled" if siteinfo.is_pagespeed else "disabled")
             ssl = ("enabled" if siteinfo.is_ssl else "disabled")
             if (ssl == "enabled"):
-                sslprovider = "Lets Encrypt"
-                sslexpiry = str(SSL.getExpirationDate(self,ee_domain))
-            else:
                 sslprovider = ''
                 sslexpiry = ''
             data = dict(domain=ee_domain, webroot=ee_site_webroot,
@@ -299,6 +296,7 @@ class EESiteEditController(CementBaseController):
                           .format(ee_domain))
 
         elif self.app.pargs.pagespeed:
+        '''
             Log.error(self, "Pagespeed support has been dropped since EasyEngine v3.6.0",False)
             Log.error(self, "Please run command again without `--pagespeed`",False)
             Log.error(self, "For more details, read - https://easyengine.io/blog/disabling-pagespeed/")
@@ -325,7 +323,7 @@ class EESiteEditController(CementBaseController):
             else:
                 Log.error(self, "Pagespeed configuration file does not exists"
                           .format(ee_domain))
-        '''
+
 
 class EESiteCreateController(CementBaseController):
     class Meta:
@@ -371,7 +369,7 @@ class EESiteCreateController(CementBaseController):
                 dict(help="create HHVM site", action='store_true')),
             (['--pagespeed'],
                 dict(help="create pagespeed site", action='store_true')),
-            (['-le','--letsencrypt'],
+            (['--ssl'],
                 dict(help="configure letsencrypt ssl for the site", action='store_true')),
             (['--user'],
                 dict(help="provide user for wordpress site")),
@@ -391,10 +389,10 @@ class EESiteCreateController(CementBaseController):
     @expose(hide=True)
     def default(self):
         #Remove Pagespeed Support Since EE 3.6.0
-        if self.app.pargs.pagespeed:
-            Log.error(self, "Pagespeed support has been dropped since EasyEngine v3.6.0",False)
-            Log.error(self, "Please run command again without `--pagespeed`",False)
-            Log.error(self, "For more details, read - https://easyengine.io/blog/disabling-pagespeed/")
+        #if self.app.pargs.pagespeed:
+        #    Log.error(self, "Pagespeed support has been dropped since EasyEngine v3.6.0",False)
+        #    Log.error(self, "Please run command again without `--pagespeed`",False)
+        #    Log.error(self, "For more details, read - https://easyengine.io/blog/disabling-pagespeed/")
         # self.app.render((data), 'default.mustache')
         # Check domain name validation
         data = dict()
@@ -556,29 +554,29 @@ class EESiteCreateController(CementBaseController):
             data['hhvm'] = False
             hhvm = 0
 
-#        if data and self.app.pargs.pagespeed:
-#            if (not self.app.pargs.experimental):
-#                Log.info(self, "PageSpeed is experimental feature and it may not "
-#                         "work with all CSS/JS/Cache of your site.\nYou can "
-#                         "disable it by passing --pagespeed=off later.\nDo you wish"
-#                         " to enable PageSpeed now for {0}?".format(ee_domain))
+        if data and self.app.pargs.pagespeed:
+            if (not self.app.pargs.experimental):
+                Log.info(self, "PageSpeed is experimental feature and it may not "
+                         "work with all CSS/JS/Cache of your site.\nYou can "
+                         "disable it by passing --pagespeed=off later.\nDo you wish"
+                         " to enable PageSpeed now for {0}?".format(ee_domain))
 
                 # Check prompt
-#                check_prompt = input("Type \"y\" to continue [n]:")
-#                if check_prompt != "Y" and check_prompt != "y":
-#                    Log.info(self, "Not using PageSpeed for site.")
-#                    data['pagespeed'] = False
-#                    pagespeed = 0
-#                    self.app.pargs.pagespeed = False
-#                else:
-#                    data['pagespeed'] = True
-#                    pagespeed = 1
-#            else:
-#                data['pagespeed'] = True
-#                pagespeed = 1
-#        elif data:
-#            data['pagespeed'] = False
-#            pagespeed = 0
+                check_prompt = input("Type \"y\" to continue [n]:")
+                if check_prompt != "Y" and check_prompt != "y":
+                    Log.info(self, "Not using PageSpeed for site.")
+                    data['pagespeed'] = False
+                    pagespeed = 0
+                    self.app.pargs.pagespeed = False
+                else:
+                    data['pagespeed'] = True
+                    pagespeed = 1
+            else:
+                data['pagespeed'] = True
+                pagespeed = 1
+        elif data:
+            data['pagespeed'] = False
+            pagespeed = 0
 
         if (cache == 'wpredis' and (not self.app.pargs.experimental)):
             Log.info(self, "Redis is experimental feature and it may not "
@@ -640,8 +638,8 @@ class EESiteCreateController(CementBaseController):
                          " http://{0}".format(ee_domain))
                 return
             # Update pagespeed config
-#            if self.app.pargs.pagespeed:
-#                operateOnPagespeed(self, data)
+            if self.app.pargs.pagespeed:
+                operateOnPagespeed(self, data)
 
             if data['php7']:
                 php_version = "7.2"
@@ -784,7 +782,7 @@ class EESiteCreateController(CementBaseController):
             Log.error(self, "Check logs for reason "
                       "`tail /var/log/ee/ee.log` & Try Again!!!")
 
-        if self.app.pargs.letsencrypt :
+        if self.app.pargs.ssl :
             if (not self.app.pargs.experimental):
                     data['letsencrypt'] = True
                     letsencrypt = True
@@ -809,7 +807,7 @@ class EESiteCreateController(CementBaseController):
                  updateSiteInfo(self, ee_domain, ssl=letsencrypt)
 
             elif data['letsencrypt'] is False:
-                Log.info(self, "Not using Let\'s encrypt for Site "
+                Log.info(self, "Not using SSL for Site "
                          " http://{0}".format(ee_domain))
 
 class EESiteUpdateController(CementBaseController):
@@ -876,10 +874,10 @@ class EESiteUpdateController(CementBaseController):
     def default(self):
         pargs = self.app.pargs
 
-        if self.app.pargs.pagespeed:
-            Log.error(self, "Pagespeed support has been dropped since EasyEngine v3.6.0",False)
-            Log.error(self, "Please run command again without `--pagespeed`",False)
-            Log.error(self, "For more details, read - https://easyengine.io/blog/disabling-pagespeed/")
+#        if self.app.pargs.pagespeed:
+#            Log.error(self, "Pagespeed support has been dropped since EasyEngine v3.6.0",False)
+#            Log.error(self, "Please run command again without `--pagespeed`",False)
+#            Log.error(self, "For more details, read - https://easyengine.io/blog/disabling-pagespeed/")
 
         if pargs.all:
             if pargs.site_name:
@@ -891,7 +889,7 @@ class EESiteUpdateController(CementBaseController):
             if not (pargs.php or pargs.php7 or
                     pargs.mysql or pargs.wp or pargs.wpsubdir or
                     pargs.wpsubdomain or pargs.w3tc or pargs.wpfc or
-                    pargs.wpsc or pargs.hhvm or pargs.wpredis or pargs.letsencrypt):
+                    pargs.wpsc or pargs.hhvm or pargs.wpredis or pargs.ssl):
                 Log.error(self, "Please provide options to update sites.")
 
         if pargs.all:
@@ -915,7 +913,7 @@ class EESiteUpdateController(CementBaseController):
 
     def doupdatesite(self, pargs):
         hhvm = None
-      #  pagespeed = None
+        pagespeed = None
         letsencrypt = False
         php7 = None
 
@@ -936,7 +934,7 @@ class EESiteUpdateController(CementBaseController):
             proxyinfo = proxyinfo.split(':')
             host = proxyinfo[0].strip()
             port = '80' if len(proxyinfo) < 2 else proxyinfo[1].strip()
-        elif stype is None and not (pargs.proxy or pargs.letsencrypt):
+        elif stype is None and not (pargs.proxy or pargs.ssl):
             stype, cache = 'html', 'basic'
         elif stype and pargs.proxy:
             Log.error(self, "--proxy can not be used with other site types")
@@ -963,7 +961,7 @@ class EESiteUpdateController(CementBaseController):
             oldsitetype = check_site.site_type
             oldcachetype = check_site.cache_type
             old_hhvm = check_site.is_hhvm
-        #    old_pagespeed = check_site.is_pagespeed
+            old_pagespeed = check_site.is_pagespeed
             check_ssl = check_site.is_ssl
             check_php_version = check_site.php_version
 
@@ -1013,7 +1011,7 @@ class EESiteUpdateController(CementBaseController):
             data['proxy'] = True
             data['host'] = host
             data['port'] = port
-#            pagespeed = False
+            pagespeed = False
             hhvm = False
             data['webroot'] = ee_site_webroot
             data['currsitetype'] = oldsitetype
@@ -1117,12 +1115,12 @@ class EESiteUpdateController(CementBaseController):
                 data['hhvm'] = False
                 hhvm = False
 
-#            if pargs.pagespeed != 'off':
-#                data['pagespeed'] = True
-#                pagespeed = True
-#            elif pargs.pagespeed == 'off':
-#                data['pagespeed'] = False
-#                pagespeed = False
+            if pargs.pagespeed != 'off':
+                data['pagespeed'] = True
+                pagespeed = True
+            elif pargs.pagespeed == 'off':
+                data['pagespeed'] = False
+                pagespeed = False
 
             if pargs.php7 == 'on' :
                 data['php7'] = True
@@ -1133,15 +1131,15 @@ class EESiteUpdateController(CementBaseController):
                 php7 = False
                 check_php_version = '5.6'
 
-#        if pargs.pagespeed:
-#            if pagespeed is old_pagespeed:
-#                if pagespeed is False:
-#                    Log.info(self, "Pagespeed is already disabled for given "
-#                             "site")
-#                elif pagespeed is True:
-#                    Log.info(self, "Pagespeed is already enabled for given "
-#                             "site")
-#                pargs.pagespeed = False
+        if pargs.pagespeed:
+            if pagespeed is old_pagespeed:
+                if pagespeed is False:
+                    Log.info(self, "Pagespeed is already disabled for given "
+                             "site")
+                elif pagespeed is True:
+                    Log.info(self, "Pagespeed is already enabled for given "
+                             "site")
+                pargs.pagespeed = False
 
         if pargs.php7:
             if php7 is old_php7:
@@ -1154,7 +1152,7 @@ class EESiteUpdateController(CementBaseController):
                 pargs.php7 = False
 
         #--letsencrypt=renew code goes here
-        if pargs.letsencrypt == "renew" and not pargs.all:
+        if pargs.ssl == "renew" and not pargs.all:
             expiry_days = SSL.getExpirationDays(self,ee_domain)
             min_expiry_days = 30
             if check_ssl:
@@ -1179,7 +1177,7 @@ class EESiteUpdateController(CementBaseController):
                     Log.warn(self, "Your cert already EXPIRED !. PLEASE renew soon . ")
             return 0
 
-        if pargs.all and pargs.letsencrypt == "renew":
+        if pargs.all and pargs.ssl == "renew":
 
             if check_ssl:
                 expiry_days = SSL.getExpirationDays(self,ee_domain,True)
@@ -1206,7 +1204,7 @@ class EESiteUpdateController(CementBaseController):
                 Log.info(self,"SSL not configured for site http://{0}".format(ee_domain))
                 return 0
 
-        if pargs.all and pargs.letsencrypt == "off":
+        if pargs.all and pargs.ssl == "off":
             if letsencrypt is check_ssl:
                 if letsencrypt is False:
                     Log.error(self, "SSl is not configured for given "
@@ -1214,11 +1212,11 @@ class EESiteUpdateController(CementBaseController):
                     return 0
             pass
 
-        if pargs.letsencrypt:
-            if pargs.letsencrypt == 'on':
+        if pargs.ssl:
+            if pargs.ssl == 'on':
                 data['letsencrypt'] = True
                 letsencrypt = True
-            elif pargs.letsencrypt == 'off':
+            elif pargs.ssl == 'off':
                 data['letsencrypt'] = False
                 letsencrypt = False
 
@@ -1229,7 +1227,7 @@ class EESiteUpdateController(CementBaseController):
                 elif letsencrypt is True:
                     Log.error(self, "SSl is already configured for given "
                              "site")
-                pargs.letsencrypt = False
+                pargs.ssl = False
 
         if pargs.hhvm:
             if hhvm is old_hhvm:
@@ -1250,13 +1248,13 @@ class EESiteUpdateController(CementBaseController):
                 data['hhvm'] = False
                 hhvm = False
 
-#        if data and (not pargs.pagespeed):
-#            if old_pagespeed is True:
-#                data['pagespeed'] = True
-#                pagespeed = True
-#            else:
-#                data['pagespeed'] = False
-#                pagespeed = False
+        if data and (not pargs.pagespeed):
+            if old_pagespeed is True:
+                data['pagespeed'] = True
+                pagespeed = True
+            else:
+                data['pagespeed'] = False
+                pagespeed = False
 
         if data and (not pargs.php7):
             if old_php7 is True:
@@ -1266,13 +1264,12 @@ class EESiteUpdateController(CementBaseController):
                 data['php7'] = False
                 php7 = False
 
-        if pargs.hhvm=="on" or pargs.letsencrypt=="on" or pargs.php7=="on":
+        if pargs.hhvm=="on" or pargs.ssl=="on" or pargs.php7=="on":
             if pargs.php7 == "on":
                 if (not pargs.experimental):
-                    Log.info(self, "PHP7.2 is experimental feature and it may not"
-                             " work with all plugins of your site.\nYou can "
-                             "disable it by passing --php7=off later.\nDo you wish"
-                             " to enable PHP now for {0}?".format(ee_domain))
+                    Log.info(self, "PHP7.2 may not work with all plugins of your site."
+                             "\nYou can disable it by passing --php7=off later."
+                             "\nDo you wish to enable PHP now for {0}?".format(ee_domain))
 
                     # Check prompt
                     check_prompt = input("Type \"y\" to continue [n]:")
@@ -1307,21 +1304,16 @@ class EESiteUpdateController(CementBaseController):
                     data['hhvm'] = True
                     hhvm = True
 
-            if pargs.letsencrypt == "on":
+            if pargs.ssl == "on":
 
                 if (not pargs.experimental):
 
-                    if oldsitetype in ['wpsubdomain']:
-	                    Log.warn(self, "Wildcard domains are not supported in Lets Encrypt.\nWP SUBDOMAIN site will get SSL for primary site only.")
-
-                    Log.info(self, "Letsencrypt is currently in beta phase."
-                             " \nDo you wish"
-                             " to enable SSl now for {0}?".format(ee_domain))
+                    Log.info(self, "Do you wish to enable SSl now for {0}?".format(ee_domain))
 
                     # Check prompt
                     check_prompt = input("Type \"y\" to continue [n]:")
                     if check_prompt != "Y" and check_prompt != "y":
-                        Log.info(self, "Not using letsencrypt for site")
+                        Log.info(self, "Not using SSL for site")
                         data['letsencrypt'] = False
                         letsencrypt = False
                     else:
@@ -1361,9 +1353,9 @@ class EESiteUpdateController(CementBaseController):
         data['ee_db_user'] = check_site.db_user
         data['ee_db_pass'] = check_site.db_password
         data['ee_db_host'] = check_site.db_host
-#        data['old_pagespeed_status'] = check_site.is_pagespeed
+        data['old_pagespeed_status'] = check_site.is_pagespeed
 
-        if not pargs.letsencrypt:
+        if not pargs.ssl:
             try:
                 pre_run_checks(self)
             except SiteError as e:
@@ -1396,10 +1388,10 @@ class EESiteUpdateController(CementBaseController):
             return 0
 
         # Update pagespeed config
-#        if pargs.pagespeed:
-#            operateOnPagespeed(self, data)
+        if pargs.pagespeed:
+            operateOnPagespeed(self, data)
 
-        if pargs.letsencrypt:
+        if pargs.ssl:
             if data['letsencrypt'] is True:
                 if os.path.isfile("{0}/conf/nginx/ssl.conf.disabled"
                               .format(ee_site_webroot)):
