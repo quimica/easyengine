@@ -778,13 +778,13 @@ class EESiteCreateController(CementBaseController):
 
         if self.app.pargs.ssl :
             if (not self.app.pargs.experimental):
-                    data['letsencrypt'] = True
-                    letsencrypt = True
+                    data['ssl'] = True
+                    ssl = True
             else:
-                 data['letsencrypt'] = True
-                 letsencrypt = True
+                 data['ssl'] = True
+                 ssl = True
 
-            if data['letsencrypt'] is True:
+            if data['ssl'] is True:
                  httpsRedirect(self,ee_domain)
 
                  if not EEService.reload_service(self, 'nginx'):
@@ -800,7 +800,7 @@ class EESiteCreateController(CementBaseController):
                         .format(ee_domain))
                  updateSiteInfo(self, ee_domain, ssl=letsencrypt)
 
-            elif data['letsencrypt'] is False:
+            elif data['ssl'] is False:
                 Log.info(self, "Not using SSL for Site "
                          " http://{0}".format(ee_domain))
 
@@ -908,7 +908,7 @@ class EESiteUpdateController(CementBaseController):
     def doupdatesite(self, pargs):
         hhvm = None
         pagespeed = None
-        letsencrypt = False
+        ssl = False
         php7 = None
 
 
@@ -1208,11 +1208,11 @@ class EESiteUpdateController(CementBaseController):
 
         if pargs.ssl:
             if pargs.ssl == 'on':
-                data['letsencrypt'] = True
-                letsencrypt = True
+                data['ssl'] = True
+                ssl = True
             elif pargs.ssl == 'off':
-                data['letsencrypt'] = False
-                letsencrypt = False
+                data['ssl'] = False
+                ssl = False
 
             if letsencrypt is check_ssl:
                 if letsencrypt is False:
@@ -1308,14 +1308,14 @@ class EESiteUpdateController(CementBaseController):
                     check_prompt = input("Type \"y\" to continue [n]:")
                     if check_prompt != "Y" and check_prompt != "y":
                         Log.info(self, "Not using SSL for site")
-                        data['letsencrypt'] = False
-                        letsencrypt = False
+                        data['ssl'] = False
+                        ssl = False
                     else:
-                        data['letsencrypt'] = True
-                        letsencrypt = True
+                        data['ssl'] = True
+                        ssl = True
                 else:
-                    data['letsencrypt'] = True
-                    letsencrypt = True
+                    data['ssl'] = True
+                    ssl = True
 
 
 
@@ -1386,7 +1386,7 @@ class EESiteUpdateController(CementBaseController):
             operateOnPagespeed(self, data)
 
         if pargs.ssl:
-            if data['letsencrypt'] is True:
+            if data['ssl'] is True:
                 if os.path.isfile("{0}/conf/nginx/ssl.conf.disabled"
                               .format(ee_site_webroot)):
                     EEFileUtils.mvfile(self, "{0}/conf/nginx/ssl.conf.disabled"
@@ -1403,7 +1403,7 @@ class EESiteUpdateController(CementBaseController):
                 Log.info(self, "Congratulations! Successfully Enabled SSl for Site "
                          " https://{0}".format(ee_domain))
 
-            elif data['letsencrypt'] is False:
+            elif data['ssl'] is False:
                 if os.path.isfile("{0}/conf/nginx/ssl.conf"
                           .format(ee_site_webroot)):
                         Log.info(self,'Setting Nginx configuration')
