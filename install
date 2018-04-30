@@ -561,14 +561,6 @@ if [ -f /etc/ImageMagick/policy.xml  ]
         fi
     fi
 
-    if [ -f /etc/nginx/nginx.conf ]; then
-        sed -i "s/.*X-Powered-By.*/\tadd_header X-Powered-By \"EasyEngine $ee_version_new\";/" /etc/nginx/nginx.conf &>> /dev/null
-    fi
-
-    if [ -f /etc/nginx/conf.d/ee-plus.conf ]; then
-        sed -i "s/.*X-Powered-By.*/\tadd_header X-Powered-By \"EasyEngine $ee_version_new\";/" /etc/nginx/conf.d/ee-plus.conf &>> /dev/null
-    fi
-
     # Disable Xdebug on old systems if and only if ee debug is off
     if [ -f /etc/php5/mods-available/xdebug.ini ]; then
         ee_debug_value=$(grep -Hr 9001 /etc/nginx/conf.d/upstream.conf | wc -l )
@@ -767,8 +759,8 @@ elif [ ! -f /usr/local/bin/ee ]; then
     ee_git_init | tee -ai $ee_install_log
 
 else
-    ee -v 2>&1 | grep $ee_version_new &>> /dev/null
-    if [[ $? -ne 0 ]];then
+    #ee -v 2>&1 | grep $ee_version_new &>> /dev/null
+    #if [[ $? -ne 0 ]];then
         read -p "Update EasyEngine to $ee_version_new (y/n): " ee_ans
         if [ "$ee_ans" = "y" ] || [ "$ee_ans" = "Y" ]; then
             ee_install_dep | tee -ai $ee_install_log
@@ -788,9 +780,9 @@ else
         else
             ee_lib_error "Not updating EasyEngine to $ee_version_new, exit status = " 1
         fi
-    else
-        ee_lib_error "You already have EasyEngine $ee_version_new, exit status = " 1
-    fi
+    #else
+    #    ee_lib_error "You already have EasyEngine $ee_version_new, exit status = " 1
+    #fi
 fi
 ee sync | tee -ai $EE_INSTALL_LOG
 
