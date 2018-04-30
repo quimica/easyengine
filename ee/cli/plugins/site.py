@@ -301,7 +301,7 @@ class EESiteEditController(CementBaseController):
             Log.error(self, "Please run command again without `--pagespeed`",False)
             Log.error(self, "For more details, read - https://easyengine.io/blog/disabling-pagespeed/")
 
-            '''
+        '''
             if os.path.isfile('{0}/conf/nginx/pagespeed.conf'
                               .format(ee_site_webroot)):
                 try:
