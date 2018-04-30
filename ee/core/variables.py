@@ -120,7 +120,7 @@ class EEVariables():
                         "php5.6-mysql", "php5.6-cli", "php5.6-curl", "php5.6-mbstring",
                          "php5.6-bcmath", "php5.6-mysql", "php5.6-opcache", "php5.6-zip", "php5.6-xml", "php5.6-soap"]
             ee_php7_2 = ["php7.2-fpm", "php7.2-curl", "php7.2-gd", "php7.2-imap",
-                          "php7.2-mcrypt", "php7.2-readline", "php7.2-common", "php7.2-recode",
+                          "php7.2-readline", "php7.2-common", "php7.2-recode",
                           "php7.2-cli", "php7.2-mbstring",
                          "php7.2-bcmath", "php7.2-mysql", "php7.2-opcache", "php7.2-zip", "php7.2-xml", "php7.2-soap"]
             ee_php_extra = ["php-memcached", "php-imagick", "php-memcache", "memcached",
@@ -138,7 +138,7 @@ class EEVariables():
                  "memcached", "graphviz", "php-pear"]
 
         ee_php7_2 = ["php7.2-fpm", "php7.2-curl", "php7.2-gd", "php7.2-imap",
-                  "php7.2-mcrypt", "php7.2-common", "php7.2-readline", "php7.2-redis",
+                  "php7.2-common", "php7.2-readline", "php7.2-redis",
                   "php7.2-mysql", "php7.2-cli", "php7.2-memcache", "php7.2-imagick",
                   "php7.2-mbstring", "php7.2-recode", "php7.2-bcmath", "php7.2-opcache", "php7.2-zip", "php7.2-xml",
                      "php7.2-soap", "php7.2-msgpack",
