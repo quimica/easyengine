@@ -159,15 +159,11 @@ class EESiteController(CementBaseController):
             php_version = siteinfo.php_version
             pagespeed = ("enabled" if siteinfo.is_pagespeed else "disabled")
             ssl = ("enabled" if siteinfo.is_ssl else "disabled")
-            if (ssl == "enabled"):
-                sslprovider = ''
-                sslexpiry = ''
             data = dict(domain=ee_domain, webroot=ee_site_webroot,
                         accesslog=access_log, errorlog=error_log,
                         dbname=ee_db_name, dbuser=ee_db_user,php_version=php_version,
                         dbpass=ee_db_pass, hhvm=hhvm,
-                        ssl=ssl, sslprovider=sslprovider,  sslexpiry= sslexpiry,
-                        type=sitetype + " " + cachetype + " ({0})"
+                        ssl=ssl, type=sitetype + " " + cachetype + " ({0})"
                         .format("enabled" if siteinfo.is_enabled else
                                 "disabled"))
             self.app.render((data), 'siteinfo.mustache')
