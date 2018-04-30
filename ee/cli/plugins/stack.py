@@ -96,7 +96,7 @@ class EEStackController(CementBaseController):
         #    Log.error(self, "Please run command again without `--pagespeed`",False)
         #    Log.error(self, "For more details, read - https://easyengine.io/blog/disabling-pagespeed/")
         #else:
-            self.app.args.print_help()
+        self.app.args.print_help()
 
     @expose(hide=True)
     def pre_pref(self, apt_packages):
