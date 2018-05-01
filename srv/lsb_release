@@ -14,19 +14,12 @@
 
 ### Here's the stuff you might want to fake.
 
-# I don't think anything actually cares about the codename, so we give the
-# underlying info from the distro's lsb_release.
 CODENAMESTRING="xenial"
 
-# This is used in a couple of different places, but should work as-is.
 DISTRIBUTORSTRING="Ubuntu 16.04 LTS"
 
-# This may need to be changed to "RedHatEnterprise", but unlikely.
 IDSTRING="Ubuntu"
 
-# If your RHEL-clone doesn't use the same release format, you may need to
-# change this string to a hard-coded value, as appropriate. Note that if you
-# do change this, you have to update this script each version upgrade.
 RELEASESTRING="16.04"
 
 ### END OF FAKEABLE STUFF. YOU PROBABLY WANT TO STOP HERE. ###

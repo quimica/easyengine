@@ -31,7 +31,7 @@ class EEVariables():
     # EasyEngine core variables
     ee_platform_distro = platform.linux_distribution()[0].lower()
     ee_platform_version = platform.linux_distribution()[1]
-    ee_platform_codename = os.popen("lsb_release -sc | tr -d \'\\n\'").read()
+    ee_platform_codename = "xenial"
 
     # Get timezone of system
     if os.path.isfile('/etc/timezone'):
