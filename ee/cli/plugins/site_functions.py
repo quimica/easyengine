@@ -1450,7 +1450,7 @@ def httpsRedirect(self,ee_domain_name,redirect=True):
                          " http://{0}".format(ee_domain_name))
         EEGit.add(self,
                   ["/etc/nginx"], msg="Adding /etc/nginx/conf.d/force-ssl-{0}.conf".format(ee_domain_name))
-        Log.info(self, "{parent_domain}"
+        Log.info(self, "{parent_domain}")
 
     else:
         if os.path.isfile("/etc/nginx/conf.d/force-ssl-{0}.conf".format(ee_domain_name)):

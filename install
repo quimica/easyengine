@@ -713,8 +713,6 @@ if [ -f /usr/local/sbin/easyengine ]; then
     fi
     read -p "Update EasyEngine to $ee_version_new (y/n): " ee_ans
     if [ "$ee_ans" = "y" ] || [ "$ee_ans" = "Y" ]; then
-        check_pagespeed | tee -ai $ee_install_log
-        ee_install_dep | tee -ai $ee_install_log
         ee_sync_db 2&>>1 $EE_INSTALL_LOG
         secure_ee_db | tee -ai $EE_INSTALL_LOG
         ee_upgrade_php | tee -ai $ee_install_log
@@ -726,7 +724,6 @@ if [ -f /usr/local/sbin/easyengine ]; then
         ee_lib_error "Not updating EasyEngine to $ee_version_new, exit status = " 1
     fi
 elif [ ! -f /usr/local/bin/ee ]; then
-    ee_install_dep | tee -ai $ee_install_log
     ee_install | tee -ai $ee_install_log
     secure_ee_db | tee -ai $EE_INSTALL_LOG
     ee_git_init | tee -ai $ee_install_log
@@ -734,7 +731,6 @@ elif [ ! -f /usr/local/bin/ee ]; then
 else
         read -p "Update EasyEngine (y/n): " ee_ans
         if [ "$ee_ans" = "y" ] || [ "$ee_ans" = "Y" ]; then
-            ee_install_dep | tee -ai $ee_install_log
             ee_sync_db 2&>>1 $EE_INSTALL_LOG
             secure_ee_db | tee -ai $EE_INSTALL_LOG
             ee_upgrade_php | tee -ai $ee_install_log
