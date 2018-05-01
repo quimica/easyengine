@@ -1404,6 +1404,11 @@ def renewLetsEncrypt(self, ee_domain_name):
 
 #redirect= False to disable https redirection
 def httpsRedirect(self,ee_domain_name,redirect=True):
+
+    #parent_domain = EEShellExec.cmd_exec(self, "echo '{0}' | sed -r 's/.*\.([^.]+\.[^.]+)$/\1/'"
+    #                                                .format(ee_domain_name))
+    parent_domain = EEShellExec.cmd_exec(self, "echo google.com")
+
     if redirect:
         if os.path.isfile("/etc/nginx/conf.d/force-ssl-{0}.conf.disabled".format(ee_domain_name)):
                 EEFileUtils.mvfile(self, "/etc/nginx/conf.d/force-ssl-{0}.conf.disabled".format(ee_domain_name),
@@ -1421,18 +1426,15 @@ def httpsRedirect(self,ee_domain_name,redirect=True):
                                      "\treturn 301 https://{0}".format(ee_domain_name)+"$request_uri;\n}" )
                 sslconf.close()
 
-                parent_domain = EEShellExec.cmd_exec(self, "echo '{0}' | sed -r 's/.*\.([^.]+\.[^.]+)$/\1/'"
-                                                    .format(ee_domain_name))
+                Log.info(self, "Adding /srv/{0}/conf/nginx/ssl.conf".format(ee_domain_name))
 
-                Log.info(self, "Adding /srv/{parent_domain}/conf/nginx/ssl.conf".format(ee_domain_name))
-
-                sslconf = open("/srv/{parent_domain}/conf/nginx/ssl.conf"
+                sslconf = open("/srv/{0}/conf/nginx/ssl.conf"
                                           .format(ee_domain_name),
                                           encoding='utf-8', mode='w')
                 sslconf.write("listen 443 ssl http2;\n"
                                          "ssl on;\n"
-                                         "ssl_certificate     /etc/letsencrypt/live/{parent_domain}/fullchain.pem;\n"
-                                         "ssl_certificate_key     /etc/letsencrypt/live/{parent_domain}/privkey.pem;\n"
+                                         "ssl_certificate     /etc/letsencrypt/live/{0}/fullchain.pem;\n"
+                                         "ssl_certificate_key     /etc/letsencrypt/live/{0}/privkey.pem;\n"
                                          .format(ee_domain_name))
                 sslconf.close()
 
@@ -1448,6 +1450,8 @@ def httpsRedirect(self,ee_domain_name,redirect=True):
                          " http://{0}".format(ee_domain_name))
         EEGit.add(self,
                   ["/etc/nginx"], msg="Adding /etc/nginx/conf.d/force-ssl-{0}.conf".format(ee_domain_name))
+        Log.info(self, "{parent_domain}"
+
     else:
         if os.path.isfile("/etc/nginx/conf.d/force-ssl-{0}.conf".format(ee_domain_name)):
              EEFileUtils.mvfile(self, "/etc/nginx/conf.d/force-ssl-{0}.conf".format(ee_domain_name),
