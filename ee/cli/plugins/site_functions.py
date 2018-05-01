@@ -1421,15 +1421,18 @@ def httpsRedirect(self,ee_domain_name,redirect=True):
                                      "\treturn 301 https://{0}".format(ee_domain_name)+"$request_uri;\n}" )
                 sslconf.close()
 
-                Log.info(self, "Adding /srv/{0}/conf/nginx/ssl.conf".format(ee_domain_name))
+                parent_domain = EEShellExec.cmd_exec(self, "echo '{0}' | sed -r 's/.*\.([^.]+\.[^.]+)$/\1/'"
+                                                    .format(ee_domain_name))
 
-                sslconf = open("/srv/{0}/conf/nginx/ssl.conf"
+                Log.info(self, "Adding /srv/{parent_domain}/conf/nginx/ssl.conf".format(ee_domain_name))
+
+                sslconf = open("/srv/{parent_domain}/conf/nginx/ssl.conf"
                                           .format(ee_domain_name),
                                           encoding='utf-8', mode='w')
                 sslconf.write("listen 443 ssl http2;\n"
                                          "ssl on;\n"
-                                         "ssl_certificate     /etc/letsencrypt/live/{0}/fullchain.pem;\n"
-                                         "ssl_certificate_key     /etc/letsencrypt/live/{0}/privkey.pem;\n"
+                                         "ssl_certificate     /etc/letsencrypt/live/{parent_domain}/fullchain.pem;\n"
+                                         "ssl_certificate_key     /etc/letsencrypt/live/{parent_domain}/privkey.pem;\n"
                                          .format(ee_domain_name))
                 sslconf.close()
 

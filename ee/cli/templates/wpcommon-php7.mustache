@@ -15,7 +15,6 @@ location = /wp-config.txt {
 # Disallow php in upload folder
 location /wp-content/uploads/ {
   location ~ \.php$ {
-    #Prevent Direct Access Of PHP Files From Web Browsers
-    deny all;
+    return 404;
   }
 }
