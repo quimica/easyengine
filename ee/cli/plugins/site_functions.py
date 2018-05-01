@@ -1404,11 +1404,6 @@ def renewLetsEncrypt(self, ee_domain_name):
 
 #redirect= False to disable https redirection
 def httpsRedirect(self,ee_domain_name,redirect=True):
-
-    #parent_domain = EEShellExec.cmd_exec(self, "echo '{0}' | sed -r 's/.*\.([^.]+\.[^.]+)$/\1/'"
-    #                                                .format(ee_domain_name))
-    parent_domain = EEShellExec.cmd_exec(self, "echo google.com")
-
     if redirect:
         if os.path.isfile("/etc/nginx/conf.d/force-ssl-{0}.conf.disabled".format(ee_domain_name)):
                 EEFileUtils.mvfile(self, "/etc/nginx/conf.d/force-ssl-{0}.conf.disabled".format(ee_domain_name),
@@ -1428,6 +1423,21 @@ def httpsRedirect(self,ee_domain_name,redirect=True):
 
                 Log.info(self, "Adding /srv/{0}/conf/nginx/ssl.conf".format(ee_domain_name))
 
+                updateSiteInfo(self, ee_domain_name, ssl=True)
+
+                # Nginx Configuration into GIT
+            except IOError as e:
+                Log.debug(self, str(e))
+                Log.debug(self, "Error occured while generating "
+                            "force-ssl-{0}.conf".format(ee_domain_name))            
+
+        Log.info(self, "Added HTTPS Force Redirection for Site "
+                         " http://{0}".format(ee_domain_name))
+        EEGit.add(self,
+                  ["/etc/nginx"], msg="Adding /etc/nginx/conf.d/force-ssl-{0}.conf".format(ee_domain_name))
+
+        if not os.path.isfile("/srv/{0}/conf/nginx/ssl.conf".format(ee_domain_name)):
+            try:
                 sslconf = open("/srv/{0}/conf/nginx/ssl.conf"
                                           .format(ee_domain_name),
                                           encoding='utf-8', mode='w')
@@ -1437,20 +1447,12 @@ def httpsRedirect(self,ee_domain_name,redirect=True):
                                          "ssl_certificate_key     /etc/letsencrypt/live/{0}/privkey.pem;\n"
                                          .format(ee_domain_name))
                 sslconf.close()
-
-                updateSiteInfo(self, ee_domain_name, ssl=True)
-
-                # Nginx Configation into GIT
+                
+                # Nginx Configuration into GIT
             except IOError as e:
                 Log.debug(self, str(e))
                 Log.debug(self, "Error occured while generating "
-                              "ssl.conf or force-ssl-{0}.conf".format(ee_domain_name))            
-
-        Log.info(self, "Added HTTPS Force Redirection for Site "
-                         " http://{0}".format(ee_domain_name))
-        EEGit.add(self,
-                  ["/etc/nginx"], msg="Adding /etc/nginx/conf.d/force-ssl-{0}.conf".format(ee_domain_name))
-        Log.info(self, "${parent_domain}")
+                            "/srv/{0}/conf/nginx/ssl.conf".format(ee_domain_name))          
 
     else:
         if os.path.isfile("/etc/nginx/conf.d/force-ssl-{0}.conf".format(ee_domain_name)):
