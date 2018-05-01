@@ -70,20 +70,6 @@ if [ ! -d $ee_log_dir ]; then
     chmod -R 700 /var/log/ee || ee_lib_error "Unable to change permissions for EasyEngine log folder, exit status " $?
 fi
 
-# Install Python3, Git, Tar and python-software-properties required packages
-# Generate Locale
-function ee_install_dep()
-{
-    if [ "$ee_linux_distro" == "Ubuntu" ]; then
-        apt-get -y install gcc curl gzip python3 python3-apt python3-setuptools python3-dev sqlite3 git tar python-software-properties software-properties-common || ee_lib_error "Unable to install pre depedencies, exit status " 1
-    elif [ "$ee_linux_distro" == "Debian" ]; then
-        apt-get -y install gcc curl gzip python3 python3-apt python3-setuptools python3-dev sqlite3 git tar python-software-properties || ee_lib_error "Unable to pre depedencies, exit status " 1
-    fi
-
-    # Generating Locale
-    locale-gen en &>> /dev/null
-}
-
 # Sqlite query to create table `sites` into ee.db
 # which will be used by EasyEngine 3.x
 function ee_sync_db()
