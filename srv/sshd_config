@@ -20,13 +20,6 @@ KexAlgorithms curve25519-sha256@libssh.org
 Ciphers chacha20-poly1305@openssh.com
 MACs umac-128-etm@openssh.com,umac-128@openssh.com
 
-#Privilege Separation is turned on for security
-UsePrivilegeSeparation yes
-
-# Lifetime and size of ephemeral version 1 server key
-KeyRegenerationInterval 3600
-ServerKeyBits 1024
-
 # Logging
 SyslogFacility AUTH
 LogLevel INFO
@@ -48,8 +41,6 @@ AuthorizedKeysFile	%h/.ssh/authorized_keys
 
 # Don't read the user's ~/.rhosts and ~/.shosts files
 IgnoreRhosts yes
-# For this to work you will also need host keys in /etc/ssh_known_hosts
-RhostsRSAAuthentication no
 # similar for protocol version 2
 HostbasedAuthentication no
 # Uncomment if you don't trust ~/.ssh/known_hosts for RhostsRSAAuthentication
@@ -104,4 +95,3 @@ UsePAM yes
 
 Match User ideas,www-data
 PasswordAuthentication yes
-#ForceCommand /bin/echo 'Holasss!'
