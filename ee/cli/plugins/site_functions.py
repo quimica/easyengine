@@ -1338,7 +1338,7 @@ def setupLetsEncrypt(self, ee_domain_name):
             sslconf.write("listen 443 ssl http2;\n"
                                      "ssl on;\n"
                                      "ssl_certificate     /etc/letsencrypt/live/{0}/fullchain.pem;\n"
-                                     "ssl_certificate_key     /etc/letsencrypt/live/{0}/privkey.pem;\n"
+                                     "ssl_certificate_key     /etc/letsencrypt/live/{0}/key.pem;\n"
                                      .format(ee_domain_name))
             sslconf.close()
             # updateSiteInfo(self, ee_domain_name, ssl=True)
