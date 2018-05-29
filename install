@@ -46,7 +46,7 @@ readonly ee_version_new="3.7.5"
 readonly ee_log_dir=/var/log/ee/
 readonly ee_install_log=/var/log/ee/install.log
 readonly ee_linux_distro="Ubuntu"
-readonly ee_distro_version="xenial"
+readonly ee_distro_version="bionic"
 
 # Checking linux distro
 if [ "$ee_linux_distro" != "Ubuntu" ] && [ "$ee_linux_distro" != "Debian" ]; then

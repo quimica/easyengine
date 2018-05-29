@@ -26,10 +26,10 @@ v3.6.2 - Jun 03, 2016
 - Check for already installed nginx package
 
 v3.6.1 - May 20, 2016
-- Fix HHVM Support on Ubuntu Xenial
+- Fix HHVM Support on Ubuntu Bionic
 
 v3.6.0 - May 16, 2016
-- Add support for Ubuntu 16.04 LTS - Xenial.
+- Add support for Ubuntu 16.04 LTS - Bionic.
 - Updated Nginx to the latest stable version (1.10.1)
 - Updated OpenSSL to v1.0.2g for HTTP/2 support
 - Drop support for spdy module. Move existing spdy sites to http2.

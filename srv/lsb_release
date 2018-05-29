@@ -14,7 +14,7 @@
 
 ### Here's the stuff you might want to fake.
 
-CODENAMESTRING="xenial"
+CODENAMESTRING="bionic"
 
 DISTRIBUTORSTRING="Ubuntu 16.04 LTS"
 
